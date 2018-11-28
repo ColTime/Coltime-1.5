@@ -90,7 +90,7 @@ public class EN extends javax.swing.JFrame implements Runnable {
                 if (rep == 0) {
                     row[0] = crs.getString(1);//Numero de orden
                     row[1] = crs.getString(2);//C.T
-//                    row[2] = crs.getString(6);//Tipo de proyecto
+//                  row[2] = crs.getString(6);//Tipo de proyecto Esto ya no existe
                     row[2] = (crs.getString(7)==null?"-":consultarNombreEmpleadoLider(crs.getString(7)));//producto
                     cantidadTotatlUnidades += crs.getInt(2);
                     //...
@@ -152,14 +152,23 @@ public class EN extends javax.swing.JFrame implements Runnable {
 //        }
 //    }
     
-    private void estadoProcesos(){
+    private void estadoProcesos(){//Calcular la cantidad pasada queda pendiente
         try {
             int pos=consultarPosicionProceso(crs.getString(3));// Posiciòn del proceso
             row[pos - 1] = crs.getString(5);//Estado de proceso
+            row[pos] = crs.getString(9);//Cantidades terminadas del proceso
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,e);
         }
     }
+    
+//    private void cantidadesTerminadas(){
+//        try {
+//            int pos = consultarPosicionProceso(crs.getString(3));// Posiciòn del proceso
+//            row[pos - 1] = crs.getString(5);//Estado de proceso
+//        } catch (Exception e) {
+//        }
+//    }
 
     private void inicializarVector() {
         for (int i = 0; i < row.length; i++) {

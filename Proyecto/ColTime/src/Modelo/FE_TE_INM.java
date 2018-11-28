@@ -56,17 +56,17 @@ public boolean iniciar_Pausar_Reiniciar_Toma_Tiempo(int orden, int detalle, int 
                 rs = ps.executeQuery();
                 rs.next();
                 //Tener en cuenta que tienes que mostrar un mensaje en el celular.(Pendiente para futuras versiones)
-                //Si la cantidad terminada ingresada es menos a la cantidad que en total se deben realizar.
+                //Si la cantidad terminada ingresada es menos a la cantidad que en total se deben realizar un registro sin ningun problema.
                 if (rs.getInt(2) + cantidadTerminada < rs.getInt(1)) {
                     //Si la afirmación es correcta se ejecutara el procedimiento para parar el tiempo.
                     cantidadAntigua = rs.getInt(2);
                     estado = 2;
-                    //Si la cantidad terminada ingresada es igual a la cantidad que en total se deben realizar.
+                    //Si la cantidad terminada ingresada es igual a la cantidad que en total se deben realizar un registro sin ningun problema.
                 } else if (rs.getInt(2) + cantidadTerminada == rs.getInt(1)) {
                     cantidadAntigua = rs.getInt(2);
                     estado = 3;
                     //Calcular cantidad por unidad.
-                    //Si la cantidad terminada ingresada es mayor a la cantidad que en total se deben realizar.
+                    //Si la cantidad terminada ingresada es mayor a la cantidad que en total se deben realizar no se debe realizar ninguna acción.
                 } else {
                     cantidadAntigua = rs.getInt(2);
                     estado = 0;
@@ -100,7 +100,12 @@ public boolean iniciar_Pausar_Reiniciar_Toma_Tiempo(int orden, int detalle, int 
                     ps.setInt(7, estado);
                     ps.setInt(8, restante);//Cantidad de productos restantes!!
                     ps.setInt(9, procesoPasoCantidades);
-                    res = !ps.execute();//Respuesta es igual a True para poder agregar los botones
+//                    res = !ps.execute();//Respuesta es igual a True para poder agregar los botones
+                    rs=ps.executeQuery();
+                    rs.next();
+                    System.out.println(rs.getObject(1));//Orden del primer proceso
+                    System.out.println(rs.getObject(2));//Orden del segundo proceso
+                    res=true;
                     //Promedio de producto por minuto.
                     cantidadProductoMinuto(detalle, negocio, lector);
                     //Tiempo total del proceso.
