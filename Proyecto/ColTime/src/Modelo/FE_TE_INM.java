@@ -89,22 +89,23 @@ public boolean iniciar_Pausar_Reiniciar_Toma_Tiempo(int orden, int detalle, int 
                     rs = ps.executeQuery();
                     rs.next();
                     T_Total = convertirHorasAMinutos(rs.getString(1).split(":"), rs.getString(2).split(":"), operarios);
-                    Qry = "CALL PA_PausarTomaDeTiempoDeProcesos(?,?,?,?,?,?,?,?,?)";
+                    Qry = "CALL PA_PausarTomaDeTiempoDeProcesos(?,?,?,?,?,?,?,?,?,?)";
                     ps = con.prepareStatement(Qry);
                     ps.setInt(1, orden);
                     ps.setInt(2, detalle);
                     ps.setInt(3, lector);
                     ps.setInt(4, negocio);
                     ps.setString(5, String.valueOf(T_Total));
-                    ps.setInt(6, cantidadTerminada + cantidadAntigua);
-                    ps.setInt(7, estado);
-                    ps.setInt(8, restante);//Cantidad de productos restantes!!
-                    ps.setInt(9, procesoPasoCantidades);
+                    ps.setInt(6, cantidadTerminada );
+                    ps.setInt(7, cantidadAntigua);
+                    ps.setInt(8, estado);
+                    ps.setInt(9, restante);//Cantidad de productos restantes!!
+                    ps.setInt(10, procesoPasoCantidades);
 //                    res = !ps.execute();//Respuesta es igual a True para poder agregar los botones
                     rs=ps.executeQuery();
                     rs.next();
                     System.out.println(rs.getObject(1));//Orden del primer proceso
-                    System.out.println(rs.getObject(2));//Orden del segundo proceso
+//                    System.out.println(rs.getObject(2));//Orden del segundo proceso
                     res=true;
                     //Promedio de producto por minuto.
                     cantidadProductoMinuto(detalle, negocio, lector);
