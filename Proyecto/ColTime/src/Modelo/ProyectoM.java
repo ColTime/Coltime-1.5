@@ -278,12 +278,13 @@ public class ProyectoM {
                 } else if (area.equals("IN")) {
                     //Ensamble
                     for (int i = 15; i <= 21; i++) {
-                        Qry = "CALL PA_RegistrarDetalleEnsamble(?,?,?,?)";
+                        Qry = "CALL PA_RegistrarDetalleEnsamble(?,?,?,?,?)";
                         ps = con.prepareStatement(Qry);
                         ps.setInt(1, i);
                         ps.setInt(2, orden);
                         ps.setInt(3, nProducto(producto));
                         ps.setString(4, "");
+                        ps.setInt(5,Integer.parseInt(Cantidad));
                         ps.execute();
                     }
                 }

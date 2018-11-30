@@ -3,7 +3,9 @@ package Controlador;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JButton;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -32,6 +34,7 @@ public class Render extends DefaultTableCellRenderer {
         } else if (table.getValueAt(row, columna_patron).equals("Ejecucion")) {
             setBackground(Color.gray);
         }
+        //Botones del jTable
         if (value instanceof JButton) {
             JButton btn = (JButton) value;
             //Sabe que boton se activa y cual no
@@ -62,6 +65,14 @@ public class Render extends DefaultTableCellRenderer {
             }
             return btn;
         }
+        
+        //Text Filed del jTable
+//        if(value instanceof JSpinner){
+//            JSpinner input=new JSpinner();
+//            input.setEnabled(true);
+//            //input.setActionCommand();
+//            return input;
+//        }
 
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); //To change body of generated methods, choose Tools | Templates.
         return this;

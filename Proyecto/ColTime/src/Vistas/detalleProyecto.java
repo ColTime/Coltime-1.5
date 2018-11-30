@@ -118,7 +118,11 @@ public class detalleProyecto extends javax.swing.JDialog {
 
         TDetalleProduccion = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false; //Disallow the editing of any cell
+                if(colIndex==15){//Input de orden
+                    return true; //Permite editar los datos de la columna numero 15
+                }else{
+                    return false; //Disallow the editing of any cell
+                }
             }
         };
         TDetalleProduccion.setAutoCreateRowSorter(true);
@@ -153,6 +157,11 @@ public class detalleProyecto extends javax.swing.JDialog {
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 TDetalleProduccionMouseReleased(evt);
+            }
+        });
+        TDetalleProduccion.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                TDetalleProduccionPropertyChange(evt);
             }
         });
         jScrollPane3.setViewportView(TDetalleProduccion);
@@ -558,6 +567,9 @@ public class detalleProyecto extends javax.swing.JDialog {
         obj.setLocationRelativeTo(null);
         obj.setVisible(true);
     }//GEN-LAST:event_jBAgregarLiderActionPerformed
+
+    private void TDetalleProduccionPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_TDetalleProduccionPropertyChange
+    }//GEN-LAST:event_TDetalleProduccionPropertyChange
 
     private void cargarTabla() {
         Tabla personalizar = new Tabla();
