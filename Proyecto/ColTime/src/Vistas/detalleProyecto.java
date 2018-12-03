@@ -4,10 +4,12 @@ import Controlador.DetalleProyecto;
 import Controlador.Empleado;
 import Controlador.FE_TE_IN;
 import Controlador.Tabla;
+import java.util.ArrayList;
 import javax.sql.rowset.CachedRowSet;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
 import rojerusan.RSNotifyAnimated;
 
 public class detalleProyecto extends javax.swing.JDialog {
@@ -48,10 +50,12 @@ public class detalleProyecto extends javax.swing.JDialog {
            jLiderProyecto.setVisible(true);
            jBAgregarLider.setVisible(true);
            jLabel15.setVisible(true);
+           btnGuardarOrden.setVisible(true);
         }else{
            jLiderProyecto.setVisible(false);
            jBAgregarLider.setVisible(false);
            jLabel15.setVisible(false);
+           btnGuardarOrden.setVisible(false);
            this.setSize(1380, 460);
         }
         //jTTimepoTotalUnidad
@@ -101,6 +105,8 @@ public class detalleProyecto extends javax.swing.JDialog {
         jBAgregarLider = new javax.swing.JButton();
         jLiderProyecto = new elaprendiz.gui.textField.TextFieldRoundBackground();
         jLabel15 = new javax.swing.JLabel();
+        btnGuardarOrden = new elaprendiz.gui.button.ButtonAction();
+        jRadioButton1 = new javax.swing.JRadioButton();
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/retro.png"))); // NOI18N
         jMenuItem1.setText("Actualizar");
@@ -118,10 +124,10 @@ public class detalleProyecto extends javax.swing.JDialog {
 
         TDetalleProduccion = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex) {
-                if(colIndex==15){//Input de orden
-                    return true; //Permite editar los datos de la columna numero 15
+                if(colIndex==15){
+                    return false;
                 }else{
-                    return false; //Disallow the editing of any cell
+                    return false;
                 }
             }
         };
@@ -301,6 +307,16 @@ public class detalleProyecto extends javax.swing.JDialog {
         jLabel15.setForeground(new java.awt.Color(128, 128, 131));
         jLabel15.setText("Lider del proyecto EN");
 
+        btnGuardarOrden.setBackground(new java.awt.Color(51, 51, 255));
+        btnGuardarOrden.setText("Guardar");
+        btnGuardarOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarOrdenActionPerformed(evt);
+            }
+        });
+
+        jRadioButton1.setText("jRadioButton1");
+
         javax.swing.GroupLayout jPInformacionLayout = new javax.swing.GroupLayout(jPInformacion);
         jPInformacion.setLayout(jPInformacionLayout);
         jPInformacionLayout.setHorizontalGroup(
@@ -357,7 +373,10 @@ public class detalleProyecto extends javax.swing.JDialog {
                             .addComponent(jTFechaIngreso4, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(94, 94, 94))
                     .addGroup(jPInformacionLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnGuardarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(167, 167, 167)
+                        .addComponent(jRadioButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLiderProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15))
@@ -425,8 +444,11 @@ public class detalleProyecto extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLiderProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21))
+                        .addGroup(jPInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLiderProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGuardarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jRadioButton1))
+                        .addGap(16, 16, 16))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPInformacionLayout.createSequentialGroup()
                         .addComponent(jBAgregarLider)
                         .addContainerGap())))
@@ -463,7 +485,7 @@ public class detalleProyecto extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
         );
 
         pack();
@@ -472,6 +494,7 @@ public class detalleProyecto extends javax.swing.JDialog {
     private void TDetalleProduccionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TDetalleProduccionMouseClicked
         //Botones de seguridad
         String[] botones = {" SI ", " NO "};
+        String v[];
         rows = TDetalleProduccion.rowAtPoint(evt.getPoint());
 
         int column = TDetalleProduccion.getColumnModel().getColumnIndexAtX(evt.getX());
@@ -538,6 +561,17 @@ public class detalleProyecto extends javax.swing.JDialog {
                         }
                     }
                 }
+            }else if(value instanceof JRadioButton){
+                JRadioButton radioBoton= (JRadioButton) value;
+                if(!radioBoton.isSelected()){
+                    //Seleccionar Primer proceso del área...
+                    DetalleProyecto obj = new DetalleProyecto();
+                    v = radioBoton.getActionCommand().split("-");// Vector de una log maxima siempre de 2
+                    obj.seleccionPrimerProcesoEnsamble(Integer.parseInt(v[1]), Integer.parseInt(v[0]));
+                    radioBoton.setSelected(true);
+                    radioBoton.updateUI();
+                    TDetalleProduccion.updateUI();
+                }
             }
         }
     }//GEN-LAST:event_TDetalleProduccionMouseClicked
@@ -570,6 +604,32 @@ public class detalleProyecto extends javax.swing.JDialog {
 
     private void TDetalleProduccionPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_TDetalleProduccionPropertyChange
     }//GEN-LAST:event_TDetalleProduccionPropertyChange
+
+    private void btnGuardarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarOrdenActionPerformed
+//        ArrayList<String> v=new ArrayList<String>();
+//        String aux="";
+//        //Recorrer la tabla para validar el orden de los procesos
+//        //Esto ya no se necesita
+//        for (int i = 0; i < TDetalleProduccion.getRowCount(); i++) {
+//            if(Integer.parseInt(String.valueOf(TDetalleProduccion.getValueAt(i, 15)))!=0){//Los procesos que tienen un orden 0 significa que no van hacer parte del proceso de desarrollo
+//                v.add(String.valueOf(TDetalleProduccion.getValueAt(i, 15))+"-"+String.valueOf(TDetalleProduccion.getValueAt(i, 16)));//Se agregar el orden y el ID del proceso de ensamble
+//                //Ordenar el vector...
+//                for (int j = 0; j < v.size() - 1; j++) {
+//                    for (int k = 0; k < v.size() - k - 1; k++) {
+//                        if (Integer.parseInt(v.get(j+1).split("-")[0]) < Integer.parseInt(v.get(j).split("-")[0])) {
+//                            aux = v.get(j+1);
+//                            v.set((j+1), v.get(j));
+//                            v.set(j, aux);
+//                        }
+//                    }
+//                }
+//                //...
+//                //Validar que siga el consecutivo de aumento de uno en uno
+//            }
+//        }
+//        //...
+//        System.out.println(v);//Mostramos el Array List
+    }//GEN-LAST:event_btnGuardarOrdenActionPerformed
 
     private void cargarTabla() {
         Tabla personalizar = new Tabla();
@@ -680,6 +740,7 @@ public class detalleProyecto extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TDetalleProduccion;
+    private elaprendiz.gui.button.ButtonAction btnGuardarOrden;
     private javax.swing.JButton jBAgregarLider;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -697,6 +758,7 @@ public class detalleProyecto extends javax.swing.JDialog {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPInformacion;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane3;
     public static elaprendiz.gui.textField.TextFieldRoundBackground jTCantidadTotal;
     public static elaprendiz.gui.textField.TextFieldRoundBackground jTFechaEntrega;

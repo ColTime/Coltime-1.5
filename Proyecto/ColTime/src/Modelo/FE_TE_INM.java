@@ -66,39 +66,45 @@ public boolean iniciar_Pausar_Reiniciar_Toma_Tiempo(int orden, int detalle, int 
                 }
                 //...
                 int restante=0;
+                //...
                 if(accion){
-                    Qry = "CALL PA_ValidarCantidadDetalleProyecto(?,?,?,?)";
-                    ps = con.prepareStatement(Qry);
-                    ps.setInt(1, orden);
-                    ps.setInt(2, detalle);
-                    ps.setInt(3, lector);
-                    ps.setInt(4, negocio);
-                    rs = ps.executeQuery();
-                    rs.next();
-                    //Tener en cuenta que tienes que mostrar un mensaje en el celular.(Pendiente para futuras versiones)
-                    //Si la cantidad terminada ingresada es menos a la cantidad que en total se deben realizar un registro sin ningun problema.
-                    if (rs.getInt(2) + cantidadTerminada < rs.getInt(1)) {
-                        //Si la afirmación es correcta se ejecutara el procedimiento para parar el tiempo.
-                        cantidadAntigua = rs.getInt(2);
-                        estado = 2;
-                        //Si la cantidad terminada ingresada es igual a la cantidad que en total se deben realizar un registro sin ningun problema.
-                    } else if (rs.getInt(2) + cantidadTerminada == rs.getInt(1)) {
-                        cantidadAntigua = rs.getInt(2);
-                        estado = 3;
-                        //Calcular cantidad por unidad.
-                        //Si la cantidad terminada ingresada es mayor a la cantidad que en total se deben realizar no se debe realizar ninguna acción.
-                    } else {
-                        cantidadAntigua = rs.getInt(2);
-                        estado = 0;
-                    }
-                    //---------
-                     restante = rs.getInt(1) - (cantidadTerminada + cantidadAntigua);//Esta es la cantidad restante del proceso.
-                    //---------
-                    operarios = rs.getInt(3);//El numero de operarios que va a trabajar en el proceso.
-                    //---------
+                    if(negocio!=3){//Si el área de produccion es "1"=Formato estandar o "2"=Teclados el estado se calcula desde el modelo
+                        Qry = "CALL PA_ValidarCantidadDetalleProyecto(?,?,?,?)";//Esto me trae tres cosas: Cantidad total del proyecto
+                        ps = con.prepareStatement(Qry);
+                        ps.setInt(1, orden);
+                        ps.setInt(2, detalle);
+                        ps.setInt(3, lector);
+                        ps.setInt(4, negocio);
+                        rs = ps.executeQuery();
+                        rs.next();
+                        //Tener en cuenta que tienes que mostrar un mensaje en el celular.(Pendiente para futuras versiones)
+                        //Si la cantidad terminada ingresada es menos a la cantidad que en total se deben realizar un registro sin ningun problema.
+                        if (rs.getInt(2) + cantidadTerminada < rs.getInt(1)) {
+                            //Si la afirmación es correcta se ejecutara el procedimiento para parar el tiempo.
+                            cantidadAntigua = rs.getInt(2);
+                            estado = 2;
+                            //Si la cantidad terminada ingresada es igual a la cantidad que en total se deben realizar un registro sin ningun problema.
+                        } else if (rs.getInt(2) + cantidadTerminada == rs.getInt(1)) {
+                            cantidadAntigua = rs.getInt(2);
+                            estado = 3;
+                            //Calcular cantidad por unidad.
+                            //Si la cantidad terminada ingresada es mayor a la cantidad que en total se deben realizar no se debe realizar ninguna acción.
+                        } else {
+                            cantidadAntigua = rs.getInt(2);
+                            estado = 0;
+                        }
+                        //---------
+                        restante = rs.getInt(1) - (cantidadTerminada + cantidadAntigua);//Esta es la cantidad restante del proceso.
+                        //---------
+                        operarios = rs.getInt(3);//El numero de operarios que va a trabajar en el proceso.
+                        //---------
 //                int pasadas=rs.getInt(1)-restante;//El numero de las cantidades disponibles para que el otro proyecto las pueda trabajar.
-                    //---------
-                    // si el estado es dos o tres (2 o 3) procedera a realizar la actualización. 31344;2;3;16;1;1 
+                        //---------
+                        // si el estado es dos o tres (2 o 3) procedera a realizar la actualización. 31344;2;3;16;1;1  
+                    }else{//Si el área de produccion es "3"=Ensamble entonces no va a realizar el calcular el estado del proceso desde el modelos sino desde la base de datos de una manera diferente.
+                        estado=-1;
+                    }
+                  //...
                 }else{
                     estado=0;
                 }
@@ -114,7 +120,8 @@ public boolean iniciar_Pausar_Reiniciar_Toma_Tiempo(int orden, int detalle, int 
                     rs = ps.executeQuery();
                     rs.next();
                     T_Total = convertirHorasAMinutos(rs.getString(1).split(":"), rs.getString(2).split(":"), operarios);
-                    Qry = "CALL PA_PausarTomaDeTiempoDeProcesos(?,?,?,?,?,?,?,?,?,?)";
+                    //...
+                    Qry = "CALL PA_PausarTomaDeTiempoDeProcesos(?,?,?,?,?,?,?,?,?,?)";//NOTA: Para el área de ensamble se van a enviar dos procesos el cual al primero se le van a restar las cantidades terminadas y al segundo se le van a sumar las cantidades terminadas
                     ps = con.prepareStatement(Qry);
                     ps.setInt(1, orden);
                     ps.setInt(2, detalle);
@@ -142,45 +149,46 @@ public boolean iniciar_Pausar_Reiniciar_Toma_Tiempo(int orden, int detalle, int 
                     //Si no cumple la condición va a retornar un falso y monstrara una mensaje de advertencia.
                     //...
                     //¿El negocio es de ensamble?
-                    if(negocio==3){
-                        int cantidadT1=0;
-                        int cantidadT2=0;
-                        int total=0;
-                        //Consultar Los proceso que tiene el producto como tal y realizar el calculo de paso de cantidades.
-                        Qry="CALL PA_ConsultarProcesoProductoEnsamble(?);";
-                        ps=con.prepareStatement(Qry);
-                        ps.setInt(1, detalle);
-                        rs=ps.executeQuery();
-                        ArrayList<String> cantProceso=new ArrayList<String>();//Cantidad que se encuentra en el proceso - idProceso
-                        //Recorremos cada uno de los proceso del producto que hace parte del proyecto que esta en ensamble
-                        while(rs.next()){
-                            //...
-                            if(rs.getInt(3)==1){//¿Es el primer proceso que se ejecuta?
-                              //Consultar La cantidad base del proyecto
-                              cantProceso.add(rs.getInt(5)+"-"+rs.getInt(1));//En la posicion 0 Siempre va estar la cantidad base
-                              cantidadT1=rs.getInt(4);//Cantidad terminada del primer proceso
-                            }else{//Para el resto de los procesos
-                                if(Integer.parseInt(cantProceso.get(0).split("-")[0])>0){//La cantidad base es mayor a 0
-                                    cantidadT2=rs.getInt(4);//Cantidad terminada del siguiente proceso
-                                    total=cantidadT1-cantidadT2;//Cantidad que tiene el sigueinte proceso
-                                    cantProceso.add(total+"-"+rs.getInt(1));//se colocal el total en el vector
-                                    cantidadT1=rs.getInt(4);//Cantidad Terminada del proceso
-                                }
-                            }
-                        }
-                        //Montar esta informacion a la base de datos
-                        for (String pos : cantProceso) {
-//                            System.out.println(pos);
-                            String v[];
-                            v=pos.split("-");//0=Cantidades que tiene cada proceso y 1= ID del proceso del area de ensamble
-                            Qry="CALL PA_ActualziarCantidadProcesosEnsamble(?,?);";
-                            ps=con.prepareStatement(Qry);
-                            ps.setInt(1, Integer.parseInt(v[1]));
-                            ps.setString(2, v[0]);
-                            ps.execute();
-                        }
-//                        System.out.println(cantProceso);
-                    }
+//                    if(negocio==3){//Esto ya no es necesario, se puede hacer directamente desde el procedimiento
+//                        
+////                        int cantidadT1=0;
+////                        int cantidadT2=0;
+////                        int total=0;
+////                        //Consultar Los proceso que tiene el producto como tal y realizar el calculo de paso de cantidades.
+////                        Qry="CALL PA_ConsultarProcesoProductoEnsamble(?);";
+////                        ps=con.prepareStatement(Qry);
+////                        ps.setInt(1, detalle);
+////                        rs=ps.executeQuery();
+////                        ArrayList<String> cantProceso=new ArrayList<String>();//Cantidad que se encuentra en el proceso - idProceso
+////                        //Recorremos cada uno de los proceso del producto que hace parte del proyecto que esta en ensamble
+////                        while(rs.next()){
+////                            //...
+////                            if(rs.getInt(3)==1){//¿Es el primer proceso que se ejecuta?
+////                              //Consultar La cantidad base del proyecto
+////                              cantProceso.add(rs.getInt(5)+"-"+rs.getInt(1));//En la posicion 0 Siempre va estar la cantidad base
+////                              cantidadT1=rs.getInt(4);//Cantidad terminada del primer proceso
+////                            }else{//Para el resto de los procesos
+////                                if(Integer.parseInt(cantProceso.get(0).split("-")[0])>0){//La cantidad base es mayor a 0
+////                                    cantidadT2=rs.getInt(4);//Cantidad terminada del siguiente proceso
+////                                    total=cantidadT1-cantidadT2;//Cantidad que tiene el sigueinte proceso
+////                                    cantProceso.add(total+"-"+rs.getInt(1));//se colocal el total en el vector
+////                                    cantidadT1=rs.getInt(4);//Cantidad Terminada del proceso
+////                                }
+////                            }
+////                        }
+////                        //Montar esta informacion a la base de datos
+////                        for (String pos : cantProceso) {
+//////                            System.out.println(pos);
+////                            String v[];
+////                            v=pos.split("-");//0=Cantidades que tiene cada proceso y 1= ID del proceso del area de ensamble
+////                            Qry="CALL PA_ActualziarCantidadProcesosEnsamble(?,?);";
+////                            ps=con.prepareStatement(Qry);
+////                            ps.setInt(1, Integer.parseInt(v[1]));
+////                            ps.setString(2, v[0]);
+////                            ps.execute();
+////                        }
+////                        System.out.println(cantProceso);
+//                    }
                     //...
                 } else {
                     res = false;
@@ -191,22 +199,30 @@ public boolean iniciar_Pausar_Reiniciar_Toma_Tiempo(int orden, int detalle, int 
             } else {
                 //Si no existe se ejecutara el procedimiento para iniciar o renaudar el tiempo
                 //...
-                if(negocio==3){
+                if(negocio==3){//Validar que este proyecto ya se tenga un proceso selccionado para iniciar
                     //Para ensamble: Validar que si no tiene un orden establecido en los procesos no se puede iniciar ningun proceso de ensamble
 //                    Pendiente realizar esta validacion
-//                    Qry = "SELECT FU_validarOrdenAsignadoProcesos(?,?,?,?,?)";//Pendiente generar la funcion
-                    //Para ensamble: Validar si tiene cantidades para procesar, sino tiene entonces no se iniciaria el proceso.
-                    Qry="SELECT FU_ValidarCantidadParaProcesosEnsamble(?,?);";
-                    ps=con.prepareStatement(Qry);
+                    Qry = "SELECT FU_ValidarProcesoInicioProcesoEnsamble(?)";//Pendiente generar la funcion
+                    ps = con.prepareStatement(Qry);
                     ps.setInt(1, detalle);
-                    ps.setInt(2, lector);
-                    rs=ps.executeQuery();
-                    if(rs.next()){
-                        if(Integer.parseInt(rs.getString(1))>0){
-                            accion=true;
-                        }else{
-                            accion=false;
-                        }   
+                    rs = ps.executeQuery();
+                    rs.next();
+                    if(rs.getInt(1)==1){//Si tiene selccionado el proceso inicial de ensamble retornara un 1 si no retornara un 0
+                        //Para ensamble: Validar si tiene cantidades para procesar, sino tiene entonces no se iniciaria el proceso.
+                        Qry = "SELECT FU_ValidarCantidadParaProcesosEnsamble(?,?);";
+                        ps = con.prepareStatement(Qry);
+                        ps.setInt(1, detalle);
+                        ps.setInt(2, lector);
+                        rs = ps.executeQuery();
+                        if (rs.next()) {
+                            if (Integer.parseInt(rs.getString(1)) > 0) {
+                                accion = true;
+                            } else {
+                                accion = false;
+                            }
+                        }
+                    }else{
+                        accion=false;
                     }
                 }
                 //...

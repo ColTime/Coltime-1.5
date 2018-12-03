@@ -139,6 +139,12 @@ public class DetalleProyecto {
         DetalleProyectoM obj = new DetalleProyectoM();
         return obj.ConsultarInformacionFiltrariaDelDetalleM(detalle);
     }
+    
+    //Seleccionar el proceso del área de ensamble por el cual va a iniciar el desarrollo de ese procesos
+    public boolean seleccionPrimerProcesoEnsamble(int detalle, int idProceso){
+        DetalleProyectoM obj = new DetalleProyectoM();
+        return obj.seleccionPrimerProcesoEnsambleM(detalle,idProceso);
+    }
 
     @Override
     protected void finalize() throws Throwable {

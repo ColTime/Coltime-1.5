@@ -3,6 +3,7 @@ package Controlador;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JButton;
+import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -64,6 +65,12 @@ public class Render extends DefaultTableCellRenderer {
                 btn.setBackground(UIManager.getColor("Button.background"));
             }
             return btn;
+        }
+        
+        //JRadioButton
+        if(value instanceof JRadioButton){
+            JRadioButton input = (JRadioButton) value;
+            return input;
         }
         
         //Text Filed del jTable
