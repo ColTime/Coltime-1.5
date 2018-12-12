@@ -133,6 +133,12 @@ public class DetalleProyecto {
         DetalleProyectoM obj = new DetalleProyectoM();
         return obj.consultarDetalleProduccion(detalle, negocio);
     }
+    
+    //Consultar el estado del detalle del proyecto para clasificar el estado de los botones para seleccionar el "orden"
+    public boolean consultarEstadoDetalleProyecto(int detalle){
+        DetalleProyectoM obj = new DetalleProyectoM();
+        return obj.consultarEstadoDetalleProyectoM(detalle);
+    }
 
     //Consulta la información que se necesita ver los encargados en la vista de detalles del proyecto.
     public CachedRowSet ConsultarInformacionFiltrariaDelDetalle(int detalle) {

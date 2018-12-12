@@ -17,7 +17,7 @@ public class Conexion {
     public Conexion(int opData) {
         //si odData es: 1=coltime o 2=sgn
         bd=(opData==1?"coltime":"sgn");
-        server = "jdbc:mysql://192.168.4.1:3306/" + bd;//Servicio de mysql
+        server = "jdbc:mysql://192.168.4.173:3306/" + bd;//Servicio de mysql
     }
     
     //Pedir permiso desde el servidor al puerto de comunicaciones <3306>

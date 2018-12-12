@@ -44,6 +44,7 @@ public class Tabla {
         
         try {
             crs = consuldateDetalleProduccion();
+            boolean estadoDetalleP=consultarEstadoDetalleProyecto();
             while (crs.next()) {
                 JButton btn = new JButton("Reiniciar");
                 JButton tiempo = new JButton("Tiempo");
@@ -51,7 +52,7 @@ public class Tabla {
                 v[0] = crs.getString(1);//Nombre del proceso
                 v[1] = crs.getString(2);//Fecha en que se inicio el proceso
                 v[2] = crs.getString(3);//Fecha en que se termino el proceso
-                v[3] = negocio != 4 ? crs.getString(13) : "0";//Cantidades restantes
+                v[3] = negocio != 4 ? crs.getString(negocio==3?17:13) : "0";//Cantidades restantes
                 v[4] = String.valueOf(crs.getInt(4));//Cantidad total Procesada
                 v[5] = crs.getString(5);//Tiempo total del proceso en minutos
                 v[6] = crs.getString(6);//Tiempo total del proceso por unidad en minutos
@@ -69,6 +70,7 @@ public class Tabla {
                 v[14] = tiempo;//Este boton se utiliza para parar el tiempo de los procesos de almacen.
                 if(negocio==3){//Seleccion del primer proceso
                       JRadioButton inicio= new JRadioButton();
+                      inicio.setEnabled(estadoDetalleP);//El estado me lo retorna la base de datos
                       inicio.setActionCommand(crs.getString(16)+"-"+detalle);//ID del proceso de ensamble-ID detalle del proyecto de ensamble
                       if(Integer.parseInt(crs.getString(15))==0){
                           //Desactivado el Radio Button
@@ -100,7 +102,15 @@ public class Tabla {
         DetalleProyecto obj = new DetalleProyecto();
         return obj.consultarDetalleProduccion(detalle, negocio);
     }
+    
+    //Consultar el estado del detalle del proyecto
+    private boolean consultarEstadoDetalleProyecto(){
+        DetalleProyecto obj = new DetalleProyecto();
+        return obj.consultarEstadoDetalleProyecto(detalle);
+    }
 
-    
-    
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize(); //To change body of generated methods, choose Tools | Templates.
+    }
 }

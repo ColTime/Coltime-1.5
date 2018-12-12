@@ -75,9 +75,10 @@ public class Modelo {
             conexion.establecerConexion();
             con=conexion.getConexion();
             //...
-            String Qry= "CALL PA_ConsultarEmpleadosColtime(?);";
+            String Qry= "CALL PA_ConsultarEmpleadosColtime(?,?);";
             ps=con.prepareStatement(Qry);
             ps.setString(1, doc);
+            ps.setString(2, "");
             rs=ps.executeQuery();
             //Estraer el nombre del empleado del resultado de la base de datos
             if(rs.next()){

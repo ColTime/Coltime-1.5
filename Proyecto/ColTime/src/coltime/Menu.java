@@ -139,8 +139,6 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
         btn3 = new rsbuttom.RSButtonMetro();
         btn5 = new rsbuttom.RSButtonMetro();
         btn6 = new rsbuttom.RSButtonMetro();
-        enviarLecturaQR = new javax.swing.JButton();
-        tramaQR = new javax.swing.JTextField();
         jPContenido = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -473,15 +471,6 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
             }
         });
         jPMenu.add(btn6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 278, 190, 42));
-
-        enviarLecturaQR.setText("Enviar");
-        enviarLecturaQR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                enviarLecturaQRActionPerformed(evt);
-            }
-        });
-        jPMenu.add(enviarLecturaQR, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 550, 70, -1));
-        jPMenu.add(tramaQR, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 510, 140, -1));
 
         jPContenido.setLayout(new javax.swing.BoxLayout(jPContenido, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -965,7 +954,7 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPContenido, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jPContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addContainerGap())))
         );
 
@@ -1063,6 +1052,8 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
                         producF.setTitle("Formato estandar");
                         producF.setVisible(true);
                         producF.negocioFE = 1;
+                        producF.setNegocio(1);
+                        producF.setVista(producF);
                     }
                     producF.agregarBotones(producF, Integer.parseInt(crs.getString(1)));
                 }
@@ -1075,6 +1066,8 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
                         producT.setTitle("Teclados");
                         producT.setVisible(true);
                         producT.negocioTE = 2;
+                        producT.setNegocio(2);
+                        producT.setVista(producT);
                     }
                     producT.agregarBotones(producT, Integer.parseInt(crs.getString(1)));
                 }
@@ -1091,6 +1084,8 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
                         producE.setTitle("Ensamble");
                         producE.setVisible(true);
                         producE.negocioIN = 3;
+                        producE.setNegocio(3);
+                        producE.setVista(producE);
                     }
                     producE.agregarBotones(producE, Integer.parseInt(crs.getString(1)));
                 }
@@ -1617,12 +1612,6 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void enviarLecturaQRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarLecturaQRActionPerformed
-        if (!tramaQR.getText().equals("")) {
-            LecturaCodigoQR(tramaQR.getText());   
-        }
-    }//GEN-LAST:event_enviarLecturaQRActionPerformed
 //Metodos de la clase menu----------------------------------------------------->
 //...    
 //Configuracion de los puertos seriales-----------------------------------------
@@ -1670,10 +1659,10 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
     }
 //Fin de la configuracion de los puertos seriales-------------------------------
 
-        public void LecturaCodigoQR(String codigo) {
-//        String beta[] = codigo.split("/");
-        String infoP[] = codigo.split(";");
-//        String infoP[] = codigo.split(";");
+    public void LecturaCodigoQR(String codigo) {
+      String infoP[] = codigo.split(";");
+        //Esta validacion queda mejor a nivel de la base de datos o del modelo...
+//        if (infoP.length == 6 || (infoP.length == 7 && ((!infoP[6].equals("0") && !infoP[3].equals("18")) || ((infoP[6].equals("0") || !infoP[6].equals("18")) && infoP[3].equals("18"))))) {
         Proyecto validar = new Proyecto();
         if (validar.validarEliminacion(Integer.parseInt(infoP[0]))) {//Valido si la orden esta eliminada o no
             if (validar.validarEjecucionOParada(Integer.parseInt(infoP[0]))) {//Valida que la orden no este parada
@@ -1687,6 +1676,8 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
                                 producF.setName("FE");
                                 producF.setTitle("Formato estandar");
                                 producF.setVisible(true);
+                                producF.setNegocio(1);
+                                producF.setVista(producF);
                             }
                             producF.RegistrarTomaTiempoNegocio(infoP, cargo, producF, myPS);
                             break;
@@ -1696,6 +1687,8 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
                                 producT.setName("TE");
                                 producT.setTitle("Teclados");
                                 producT.setVisible(true);
+                                producT.setNegocio(2);
+                                producT.setVista(producT);   
                             }
                             producT.RegistrarTomaTiempoNegocio(infoP, cargo, producT, myPS);
                             break;
@@ -1705,6 +1698,8 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
                                 producE.setName("IN");
                                 producE.setTitle("Ensamble");
                                 producE.setVisible(true);
+                                producE.setNegocio(3);
+                                producE.setVista(producE);
                             }
                             producE.RegistrarTomaTiempoNegocio(infoP, cargo, producE, myPS);
                             break;
@@ -1722,6 +1717,8 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
 //            enviarMensajeCelular("¡Alerta!" + "n/" + "Este numero de orden no existe.");
             new rojerusan.RSNotifyAnimated("¡Alerta!", "Este numero de orden no existe.", 7, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.BottomUp, RSNotifyAnimated.TypeNotify.WARNING).setVisible(true);
         }
+//        }
+//       
     }
 
     public void limpiarInformacionAreas() {
@@ -1972,7 +1969,6 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
     public rsbuttom.RSButtonMetro btn5;
     public rsbuttom.RSButtonMetro btn6;
     public javax.swing.JButton btnMenu;
-    public javax.swing.JButton enviarLecturaQR;
     public javax.swing.ButtonGroup estadoLectura;
     public javax.swing.JButton jBMinimizar;
     public javax.swing.JButton jButton1;
@@ -2029,7 +2025,6 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
     public static javax.swing.JRadioButtonMenuItem jRLActivado;
     public static javax.swing.JRadioButtonMenuItem jRLDesactivado;
     public rojerusan.RSFotoCircle rSUsuario;
-    public javax.swing.JTextField tramaQR;
     // End of variables declaration//GEN-END:variables
     @Override
     protected void finalize() throws Throwable {

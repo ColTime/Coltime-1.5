@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-11-2018 a las 22:24:23
+-- Tiempo de generación: 26-03-2018 a las 15:20:29
 -- Versión del servidor: 10.1.29-MariaDB
 -- Versión de PHP: 7.2.0
 
@@ -64,9 +64,9 @@ IF busqueda=1 THEN
 
 SET id=(SELECT f.idDetalle_formato_estandar from detalle_formato_estandar f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector);
 
- UPDATE detalle_formato_estandar f SET  f.hora_terminacion=now() WHERE f.idDetalle_formato_estandar=id;
+ UPDATE detalle_formato_estandar f SET  f.hora_terminacion=CURRENT_TIME WHERE f.idDetalle_formato_estandar=id;
 
-SELECT f.tiempo_total_por_proceso,TIME_FORMAT(TIMEDIFF(f.hora_terminacion,f.hora_ejecucion),'%H:%i:%s') as diferencia,TIMESTAMPDIFF(MINUTE,f.hora_ejecucion,f.hora_terminacion) AS diferencia2 from detalle_formato_estandar f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=4;
+SELECT f.tiempo_total_por_proceso,TIME_FORMAT(TIMEDIFF(TIME_FORMAT(f.hora_terminacion,'%H:%i:%s'),TIME_FORMAT(f.hora_ejecucion,'%H:%i:%s')),'%H:%i:%s') as diferencia from detalle_formato_estandar f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=4;
 
 
 ELSE
@@ -74,18 +74,18 @@ ELSE
  
 SET id=(SELECT f.idDetalle_teclados from detalle_teclados f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector);
 
- UPDATE detalle_teclados f SET  f.hora_terminacion=now() WHERE f.idDetalle_teclados=id;
+ UPDATE detalle_teclados f SET  f.hora_terminacion=CURRENT_TIME WHERE f.idDetalle_teclados=id;
 
-SELECT f.tiempo_total_proceso,TIME_FORMAT(TIMEDIFF(f.hora_terminacion,f.hora_ejecucion),'%H:%i:%s') as diferencia from detalle_teclados f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=4;
+SELECT f.tiempo_total_proceso,TIME_FORMAT(TIMEDIFF(TIME_FORMAT(f.hora_terminacion,'%H:%i:%s'),TIME_FORMAT(f.hora_ejecucion,'%H:%i:%s')),'%H:%i:%s') as diferencia from detalle_teclados f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=4;
 
  ELSE
   IF busqueda=3 THEN
   
   SET id=(SELECT f.idDetalle_ensamble from detalle_ensamble f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector);
 
- UPDATE detalle_ensamble f SET  f.hora_terminacion=now() WHERE f.idDetalle_ensamble=id;
+ UPDATE detalle_ensamble f SET  f.hora_terminacion=CURRENT_TIME WHERE f.idDetalle_ensamble=id;
   
-  SELECT f.tiempo_total_por_proceso,TIME_FORMAT(TIMEDIFF(f.hora_terminacion,f.hora_ejecucion),'%H:%i:%s') as diferencia from detalle_ensamble f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=4;
+  SELECT f.tiempo_total_por_proceso,TIME_FORMAT(TIMEDIFF(TIME_FORMAT(f.hora_terminacion,'%H:%i:%s'),TIME_FORMAT(f.hora_ejecucion,'%H:%i:%s')),'%H:%i:%s') as diferencia from detalle_ensamble f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=4;
   
   END IF;
  
@@ -634,13 +634,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_DetalleDelDetalleDelproyecto` (I
 BEGIN
 
 IF negocio=1 THEN
-SELECT p.nombre_proceso,Date_Format(f.fecha_inicio,'%d-%M-%Y') as inicio,Date_format(f.fecha_fin,'%d-%M-%Y') as fin,f.cantidad_terminada,f.tiempo_total_por_proceso,f.tiempo_por_unidad,e.nombre as estado,TIME_FORMAT(f.hora_ejecucion,'%r'),TIME_FORMAT(TIMEDIFF(now(),f.hora_ejecucion),'%H:%i:%S') as tiempoActual,TIME_FORMAT(f.hora_terminacion,'%r') as "hora terminacion",TIME_FORMAT(TIMEDIFF(f.hora_terminacion,f.hora_ejecucion),'%H:%i:%S') as InicioTerminadoIntervalo,f.idDetalle_formato_estandar,f.restantes,f.noperarios FROM detalle_formato_estandar f JOIN procesos p on f.Procesos_idproceso=p.idproceso JOIN estado e on f.estado_idestado=e.idestado where f.detalle_proyecto_idDetalle_proyecto=detalle ORDER BY f.Procesos_idproceso ASC;
+SELECT p.nombre_proceso,Date_Format(f.fecha_inicio,'%d-%M-%Y') as inicio,Date_format(f.fecha_fin,'%d-%M-%Y') as fin,f.cantidad_terminada,f.tiempo_total_por_proceso,f.tiempo_por_unidad,e.nombre as estado,TIME_FORMAT(f.hora_ejecucion,'%r'),TIME_FORMAT(TIMEDIFF(CURRENT_TIME,f.hora_ejecucion),'%H:%i:%s') as tiempoActual,TIME_FORMAT(f.hora_terminacion,'%r') as "hora terminacion",TIME_FORMAT(TIMEDIFF(TIME_FORMAT(f.hora_terminacion,'%H:%i:%s'),TIME_FORMAT(f.hora_ejecucion,'%H:%i:%s')),'%H:%i:%s') as InicioTerminadoIntervalo,f.idDetalle_formato_estandar,f.restantes,f.noperarios FROM detalle_formato_estandar f JOIN procesos p on f.Procesos_idproceso=p.idproceso JOIN estado e on f.estado_idestado=e.idestado where f.detalle_proyecto_idDetalle_proyecto=detalle ORDER BY f.Procesos_idproceso ASC;
 ELSE
   IF negocio=2 THEN
-  SELECT p.nombre_proceso,Date_Format(f.fecha_inicio,'%d-%M-%Y'),Date_format(f.fecha_fin,'%d-%M-%Y'),f.cantidad_terminada,f.tiempo_total_proceso,f.tiempo_por_unidad,e.nombre,TIME_FORMAT(f.hora_ejecucion,'%r'),TIME_FORMAT(TIMEDIFF(now(),f.hora_ejecucion),'%H:%i:%S') as tiempoActual,TIME_FORMAT(f.hora_terminacion,'%r'),TIME_FORMAT(TIMEDIFF(f.hora_terminacion,f.hora_ejecucion),'%H:%i:%s'),f.idDetalle_teclados,f.restantes,f.noperarios FROM detalle_teclados f JOIN procesos p on f.Procesos_idproceso=p.idproceso JOIN estado e on f.estado_idestado=e.idestado where f.detalle_proyecto_idDetalle_proyecto=detalle ORDER BY f.Procesos_idproceso ASC;
+  SELECT p.nombre_proceso,Date_Format(f.fecha_inicio,'%d-%M-%Y'),Date_format(f.fecha_fin,'%d-%M-%Y'),f.cantidad_terminada,f.tiempo_total_proceso,f.tiempo_por_unidad,e.nombre,TIME_FORMAT(f.hora_ejecucion,'%r'),TIME_FORMAT(TIMEDIFF(CURRENT_TIME,f.hora_ejecucion),'%H:%i:%s'),TIME_FORMAT(f.hora_terminacion,'%r'),TIME_FORMAT(TIMEDIFF(f.hora_terminacion,f.hora_ejecucion),'%H:%i:%s'),f.idDetalle_teclados,f.restantes,f.noperarios FROM detalle_teclados f JOIN procesos p on f.Procesos_idproceso=p.idproceso JOIN estado e on f.estado_idestado=e.idestado where f.detalle_proyecto_idDetalle_proyecto=detalle ORDER BY f.Procesos_idproceso ASC;
   ELSE
    IF negocio=3 THEN
-SELECT p.nombre_proceso,Date_Format(f.fecha_inicio,'%d-%M-%Y'),Date_format(f.fecha_fin,'%d-%M-%Y'),f.cantidad_terminada,f.tiempo_total_por_proceso,f.tiempo_por_unidad,e.nombre,TIME_FORMAT(f.hora_ejecucion,'%r'),TIME_FORMAT(TIMEDIFF(now(),f.hora_ejecucion),'%H:%i:%S') as tiempoActual,TIME_FORMAT(f.hora_terminacion,'%r'),TIME_FORMAT(TIMEDIFF(f.hora_terminacion,f.hora_ejecucion),'%H:%i:%s'),f.idDetalle_ensamble,f.restantes,f.noperarios FROM detalle_ensamble f JOIN procesos p on f.Procesos_idproceso=p.idproceso JOIN estado e on f.estado_idestado=e.idestado where f.detalle_proyecto_idDetalle_proyecto=detalle ORDER BY f.Procesos_idproceso ASC;
+SELECT p.nombre_proceso,Date_Format(f.fecha_inicio,'%d-%M-%Y'),Date_format(f.fecha_fin,'%d-%M-%Y'),f.cantidad_terminada,f.tiempo_total_por_proceso,f.tiempo_por_unidad,e.nombre,TIME_FORMAT(f.hora_ejecucion,'%r'),TIME_FORMAT(TIMEDIFF(CURRENT_TIME,f.hora_ejecucion),'%H:%i:%s'),TIME_FORMAT(f.hora_terminacion,'%r'),TIME_FORMAT(TIMEDIFF(f.hora_terminacion,f.hora_ejecucion),'%H:%i:%s'),f.idDetalle_ensamble,f.restantes,f.noperarios FROM detalle_ensamble f JOIN procesos p on f.Procesos_idproceso=p.idproceso JOIN estado e on f.estado_idestado=e.idestado where f.detalle_proyecto_idDetalle_proyecto=detalle ORDER BY f.Procesos_idproceso ASC;
    ELSE
     IF negocio=4 THEN
     SELECT p.nombre_proceso,Date_Format(al.fecha_inicio,'%d-%M-%Y'),Date_format(al.fecha_fin,'%d-%M-%Y'),al.cantidad_recibida,al.tiempo_total_proceso,al.tiempo_total_proceso,e.nombre,TIME_FORMAT(al.hora_registro,'%r'),datediff(CURRENT_DATE,al.fecha_inicio) as dias,TIME_FORMAT(al.hora_llegada,'%r'),datediff(al.fecha_fin,al.fecha_inicio),al.idalmacen FROM almacen al JOIN procesos p on al.Procesos_idproceso=p.idproceso JOIN estado e on al.estado_idestado=e.idestado where al.detalle_proyecto_idDetalle_proyecto=detalle ORDER BY al.Procesos_idproceso ASC;
@@ -809,7 +809,7 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_InformacionFiltrariaDetalleProyecto` (IN `iddetalle` INT)  NO SQL
 BEGIN
 
-SELECT p.nombre_cliente,p.nombre_proyecto,DATE_FORMAT(p.fecha_ingreso,'%d-%M-%Y') as fechaIngreso,DATE_FORMAT(p.fecha_entrega,'%d-%M-%Y')AS fechaEntrega,dp.canitadad_total,dp.tiempo_total,dp.Total_timepo_Unidad,DATE_FORMAT(p.entregaCircuitoFEoGF,'%d-%M-%Y') AS fecha1,DATE_FORMAT(p.entregaCOMCircuito,'%d-%M-%Y') AS fecha2,DATE_FORMAT(p.entregaPCBFEoGF,'%d-%M-%Y') AS fecha3,DATE_FORMAT(p.entregaPCBCom,'%d-%M-%Y') AS fecha4,dp.lider_proyecto FROM proyecto p JOIN detalle_proyecto dp ON p.numero_orden=dp.proyecto_numero_orden WHERE dp.idDetalle_proyecto=iddetalle;
+SELECT p.nombre_cliente,p.nombre_proyecto,DATE_FORMAT(p.fecha_ingreso,'%d-%M-%Y') as fechaIngreso,DATE_FORMAT(p.fecha_entrega,'%d-%M-%Y')AS fechaEntrega,dp.canitadad_total,dp.tiempo_total,dp.Total_timepo_Unidad,DATE_FORMAT(p.entregaCircuitoFEoGF,'%d-%M-%Y') AS fecha1,DATE_FORMAT(p.entregaCOMCircuito,'%d-%M-%Y') AS fecha2,DATE_FORMAT(p.entregaPCBFEoGF,'%d-%M-%Y') AS fecha3,DATE_FORMAT(p.entregaPCBCom,'%d-%M-%Y') AS fecha4 FROM proyecto p JOIN detalle_proyecto dp ON p.numero_orden=dp.proyecto_numero_orden WHERE dp.idDetalle_proyecto=iddetalle;
 
 END$$
 
@@ -888,7 +888,7 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_InformacionQR` (IN `orden` INT)  NO SQL
 BEGIN
-SELECT d.idDetalle_proyecto,d.tipo_negocio_idtipo_negocio,d.negocio_idnegocio,DATE_FORMAT(p.fecha_entrega,'%d-%m-%Y'),p.nombre_proyecto,d.canitadad_total,d.material from proyecto p JOIN detalle_proyecto d ON p.numero_orden=d.proyecto_numero_orden JOIN tipo_negocio t ON d.tipo_negocio_idtipo_negocio=t.idtipo_negocio where d.proyecto_numero_orden=orden and d.PNC=0;
+SELECT d.idDetalle_proyecto,d.tipo_negocio_idtipo_negocio,d.negocio_idnegocio from detalle_proyecto d JOIN tipo_negocio t ON d.tipo_negocio_idtipo_negocio=t.idtipo_negocio where d.proyecto_numero_orden=orden and d.PNC=0;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_InformeDeProduccionEN` (IN `orden` INT)  NO SQL
@@ -943,14 +943,14 @@ BEGIN
 
 #SELECT p.numero_orden AS orden,p.parada AS parada,p.nombre_cliente AS cliente,p.nombre_proyecto AS proyecto,dp.idDetalle_proyecto AS proyecto,dp.negocio_idnegocio AS negocio,DATE_FORMAT(p.fecha_ingreso,'%Y-%m-%d') AS ingreso,p.fecha_entrega AS entrega,p.estadoEmpresa AS subEstado,p.NFEE AS NFEE,dp.estado_idestado AS estadoDetalle,dp.tipo_negocio_idtipo_negocio AS tipoNegocio,df.Procesos_idproceso AS formatoEstandar,df.cantidad_terminada,dt.Procesos_idproceso as Teclados,dt.cantidad_terminada,de.Procesos_idproceso as Ensamble,de.cantidad_terminada FROM proyecto p JOIN detalle_proyecto dp ON p.numero_orden=dp.proyecto_numero_orden LEFT JOIN detalle_formato_estandar df ON dp.idDetalle_proyecto=df.detalle_proyecto_idDetalle_proyecto LEFT JOIN detalle_teclados dt ON dp.idDetalle_proyecto=dt.detalle_proyecto_idDetalle_proyecto LEFT JOIN detalle_ensamble de ON dp.idDetalle_proyecto=de.detalle_proyecto_idDetalle_proyecto;
 
-SELECT p.numero_orden AS orden,p.parada AS parada,p.nombre_cliente AS cliente,p.nombre_proyecto AS proyecto,dp.idDetalle_proyecto AS proyecto,dp.negocio_idnegocio AS negocio,DATE_FORMAT(p.fecha_ingreso,'%d/%m/%Y') AS ingreso,DATE_FORMAT(p.fecha_entrega,'%d/%m/%Y') AS entrega,p.estadoEmpresa AS subEstado,DATE_FORMAT(p.NFEE,'%d/%m/%Y') AS NFEE,dp.estado_idestado AS estadoDetalle,dp.tipo_negocio_idtipo_negocio AS tipoNegocio,df.Procesos_idproceso AS formatoEstandar,df.cantidad_terminada,dt.Procesos_idproceso as Teclados,dt.cantidad_terminada,de.Procesos_idproceso as Ensamble,de.cantidad_terminada,dp.canitadad_total FROM proyecto p JOIN detalle_proyecto dp ON p.numero_orden=dp.proyecto_numero_orden LEFT JOIN detalle_formato_estandar df ON dp.idDetalle_proyecto=df.detalle_proyecto_idDetalle_proyecto LEFT JOIN detalle_teclados dt ON dp.idDetalle_proyecto=dt.detalle_proyecto_idDetalle_proyecto LEFT JOIN detalle_ensamble de ON dp.idDetalle_proyecto=de.detalle_proyecto_idDetalle_proyecto WHERE p.estado_idestado!=3 and dp.negocio_idnegocio!=4 and p.eliminacion!=0  ORDER BY p.numero_orden,df.idDetalle_formato_estandar,dt.Procesos_idproceso,de.Procesos_idproceso,dp.tipo_negocio_idtipo_negocio,dp.estado_idestado;
+SELECT p.numero_orden AS orden,p.parada AS parada,p.nombre_cliente AS cliente,p.nombre_proyecto AS proyecto,dp.idDetalle_proyecto AS proyecto,dp.negocio_idnegocio AS negocio,DATE_FORMAT(p.fecha_ingreso,'%d/%m/%Y') AS ingreso,DATE_FORMAT(p.fecha_entrega,'%d/%m/%Y') AS entrega,p.estadoEmpresa AS subEstado,DATE_FORMAT(p.NFEE,'%d/%m/%Y') AS NFEE,dp.estado_idestado AS estadoDetalle,dp.tipo_negocio_idtipo_negocio AS tipoNegocio,df.Procesos_idproceso AS formatoEstandar,df.cantidad_terminada,dt.Procesos_idproceso as Teclados,dt.cantidad_terminada,de.Procesos_idproceso as Ensamble,de.cantidad_terminada,dp.canitadad_total FROM proyecto p JOIN detalle_proyecto dp ON p.numero_orden=dp.proyecto_numero_orden LEFT JOIN detalle_formato_estandar df ON dp.idDetalle_proyecto=df.detalle_proyecto_idDetalle_proyecto LEFT JOIN detalle_teclados dt ON dp.idDetalle_proyecto=dt.detalle_proyecto_idDetalle_proyecto LEFT JOIN detalle_ensamble de ON dp.idDetalle_proyecto=de.detalle_proyecto_idDetalle_proyecto WHERE p.estado_idestado!=3 and dp.negocio_idnegocio!=4  ORDER BY p.numero_orden,df.idDetalle_formato_estandar,dt.Procesos_idproceso,de.Procesos_idproceso,dp.tipo_negocio_idtipo_negocio,dp.estado_idestado;
 
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_InformeNEN` ()  NO SQL
 BEGIN
 
-SELECT dp.proyecto_numero_orden,dp.canitadad_total,p.nombre_proceso,en.noperarios,en.estado_idestado,pp.tipo_proyecto,dp.lider_proyecto,en.restantes,en.cantidad_terminada,en.pasoProceso,en.orden FROM detalle_ensamble en LEFT JOIN detalle_proyecto dp ON en.detalle_proyecto_idDetalle_proyecto=dp.idDetalle_proyecto JOIN procesos p ON en.Procesos_idproceso=p.idproceso JOIN proyecto pp ON dp.proyecto_numero_orden=pp.numero_orden JOIN tipo_negocio t ON dp.tipo_negocio_idtipo_negocio=t.idtipo_negocio WHERE  dp.negocio_idnegocio=3 AND pp.estado_idestado!=3 AND pp.eliminacion!=0 ORDER BY dp.proyecto_numero_orden,dp.tipo_negocio_idtipo_negocio,en.orden;
+SELECT dp.proyecto_numero_orden,dp.canitadad_total,p.nombre_proceso,en.noperarios,en.estado_idestado,pp.tipo_proyecto,t.nombre FROM detalle_ensamble en LEFT JOIN detalle_proyecto dp ON en.detalle_proyecto_idDetalle_proyecto=dp.idDetalle_proyecto JOIN procesos p ON en.Procesos_idproceso=p.idproceso JOIN proyecto pp ON dp.proyecto_numero_orden=pp.numero_orden JOIN tipo_negocio t ON dp.tipo_negocio_idtipo_negocio=t.idtipo_negocio WHERE  dp.negocio_idnegocio=3 AND pp.estado_idestado!=3 AND pp.eliminacion!=0 ORDER BY dp.proyecto_numero_orden,dp.tipo_negocio_idtipo_negocio;
 
 
 END$$
@@ -983,11 +983,11 @@ set id=(SELECT f.idDetalle_formato_estandar from detalle_formato_estandar f JOIN
 set id1=(SELECT f.idDetalle_formato_estandar from detalle_formato_estandar f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=2);
 
 IF id !='null' THEN
-UPDATE detalle_formato_estandar f SET f.fecha_inicio=CURDATE(), f.estado_idestado=4, f.hora_ejecucion=now(),f.noperarios=oper WHERE f.idDetalle_formato_estandar=id;
+UPDATE detalle_formato_estandar f SET f.fecha_inicio=CURDATE(), f.estado_idestado=4, f.hora_ejecucion=CURRENT_TIME,f.noperarios=oper WHERE f.idDetalle_formato_estandar=id;
 END IF;
 
 IF id1 !='null' THEN
-UPDATE detalle_formato_estandar f SET  f.estado_idestado=4, f.hora_ejecucion=now(),f.hora_terminacion=null,f.noperarios=oper WHERE f.idDetalle_formato_estandar=id1;
+UPDATE detalle_formato_estandar f SET  f.estado_idestado=4, f.hora_ejecucion=CURRENT_TIME,f.hora_terminacion=null,f.noperarios=oper WHERE f.idDetalle_formato_estandar=id1;
 END IF;
 
 SET cantidadp =(SELECT COUNT(*) FROM detalle_formato_estandar d WHERE  d.detalle_proyecto_idDetalle_proyecto=(detalle) AND d.estado_idestado=1);
@@ -1014,11 +1014,11 @@ ELSE
 set id1=(SELECT f.idDetalle_teclados from detalle_teclados f LEFT JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=2);
 
 IF id !='null' THEN
-UPDATE detalle_teclados f SET f.fecha_inicio=CURDATE(), f.estado_idestado=4, f.hora_ejecucion=now(),f.noperarios=oper WHERE f.idDetalle_teclados=id ;
+UPDATE detalle_teclados f SET f.fecha_inicio=CURDATE(), f.estado_idestado=4, f.hora_ejecucion=CURRENT_TIME,f.noperarios=oper WHERE f.idDetalle_teclados=id ;
 END IF;
 
 IF id1 !='null' THEN
-UPDATE detalle_teclados f SET f.estado_idestado=4, f.hora_ejecucion=now(),f.hora_terminacion=null,f.noperarios=oper WHERE f.idDetalle_teclados=id1 ;
+UPDATE detalle_teclados f SET f.estado_idestado=4, f.hora_ejecucion=CURRENT_TIME,f.hora_terminacion=null,f.noperarios=oper WHERE f.idDetalle_teclados=id1 ;
 END IF;
   
   SET cantidadp =(SELECT COUNT(*) FROM detalle_teclados d WHERE  d.detalle_proyecto_idDetalle_proyecto=(detalle) AND d.estado_idestado=1);
@@ -1045,11 +1045,11 @@ set id=(SELECT f.idDetalle_ensamble from detalle_ensamble f LEFT JOIN detalle_pr
 set id1=(SELECT f.idDetalle_ensamble from detalle_ensamble f LEFT JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=2); 
 
 IF id !='null' THEN
-UPDATE detalle_ensamble f SET f.fecha_inicio=CURDATE(), f.estado_idestado=4, f.hora_ejecucion=now(),f.noperarios=oper WHERE f.idDetalle_ensamble=id;
+UPDATE detalle_ensamble f SET f.fecha_inicio=CURDATE(), f.estado_idestado=4, f.hora_ejecucion=CURRENT_TIME,f.noperarios=oper WHERE f.idDetalle_ensamble=id;
 END IF;
 
 IF id1 !='null' THEN
-UPDATE detalle_ensamble f SET  f.estado_idestado=4, f.hora_ejecucion=now(),f.hora_terminacion=null,f.noperarios=oper WHERE f.idDetalle_ensamble=id1 ;
+UPDATE detalle_ensamble f SET  f.estado_idestado=4, f.hora_ejecucion=CURRENT_TIME,f.hora_terminacion=null,f.noperarios=oper WHERE f.idDetalle_ensamble=id1 ;
 END IF;
 
 SET cantidadp =(SELECT COUNT(*) FROM detalle_ensamble d WHERE  d.detalle_proyecto_idDetalle_proyecto=(detalle) AND d.estado_idestado=1);
@@ -1256,94 +1256,32 @@ CALL PA_CambiarEstadoDeProductos(4,detalle);
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_PausarTomaDeTiempoDeProcesos` (IN `orden` INT, IN `detalle` INT, IN `lector` INT, IN `busqueda` INT, IN `tiempo` VARCHAR(8), IN `cantidadTerminada` INT, IN `cantidadAntiguaTermianda` INT, IN `est` TINYINT(1), IN `res` INT(6), IN `procesoPasar` INT(6))  NO SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PA_PausarTomaDeTiempoDeProcesos` (IN `orden` INT, IN `detalle` INT, IN `lector` INT, IN `busqueda` INT, IN `tiempo` VARCHAR(8), IN `cantidad` INT, IN `est` TINYINT(1), IN `res` INT(6))  NO SQL
 BEGIN
 DECLARE id int;
 DECLARE cantidadp int;
-DECLARE primero int;
-DECLARE segundo int;
-DECLARE restanteProcesoA int;
-#se encarga de hacer la diferencia de tiempo de un dia para otro y tener el formato de hora aplicado.
-#SELECT SEC_TO_TIME(TIMESTAMPDIFF(MINUTE, '2018-10-10 11:00:00','2018-10-11 12:00:00')*60)
 IF est=2 THEN
 
 IF busqueda=1 THEN
 
 SET id=(SELECT f.idDetalle_formato_estandar from detalle_formato_estandar f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=4);
  
- UPDATE detalle_formato_estandar f SET  f.estado_idestado=est, f.tiempo_total_por_proceso=tiempo,f.cantidad_terminada=(cantidadTerminada+cantidadAntiguaTermianda),f.restantes=res,f.noperarios=0 WHERE f.idDetalle_formato_estandar=id ;
+ UPDATE detalle_formato_estandar f SET  f.estado_idestado=est, f.tiempo_total_por_proceso=tiempo,f.cantidad_terminada=cantidad,f.restantes=res,f.noperarios=0 WHERE f.idDetalle_formato_estandar=id ;
 
 ELSE
  IF busqueda=2 THEN
  
  SET id=(SELECT f.idDetalle_teclados from detalle_teclados f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=4);
  
- UPDATE detalle_teclados f SET  f.estado_idestado=est, f.tiempo_total_proceso=tiempo, f.cantidad_terminada=(cantidadTerminada+cantidadAntiguaTermianda),f.restantes=res,f.noperarios=0 WHERE f.idDetalle_teclados=id ;
+ UPDATE detalle_teclados f SET  f.estado_idestado=est, f.tiempo_total_proceso=tiempo, f.cantidad_terminada=cantidad,f.restantes=res,f.noperarios=0 WHERE f.idDetalle_teclados=id ;
  
  ELSE
   IF busqueda=3 THEN
   
   SET id=(SELECT f.idDetalle_ensamble from detalle_ensamble f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=4);
-  #...
-  #Ya no es necesario ingresar el proceso al cual se pasa la informacion
-  /*IF EXISTS(SELECT * FROM detalle_ensamble e WHERE e.idDetalle_ensamble=id AND e.pasoProceso="0") THEN
-  	UPDATE detalle_ensamble f SET  f.estado_idestado=est, f.tiempo_total_por_proceso=tiempo,f.cantidad_terminada=cantidad,f.restantes=res,f.noperarios=0,f.pasoProceso =procesoPasar WHERE f.idDetalle_ensamble=id;
-  ELSE
-  	UPDATE detalle_ensamble f SET  f.estado_idestado=est, f.tiempo_total_por_proceso=tiempo,f.cantidad_terminada=cantidad,f.restantes=res,f.noperarios=0 WHERE f.idDetalle_ensamble=id;
-  END IF;*/
-  #Consultar Campo orden del primer proceso fijado previamente
-  SET primero=(SELECT e.orden FROM detalle_ensamble e WHERE e.idDetalle_ensamble=id);
-  #Consultar el campo orden del segundo proceso seleccionado para pasar la cantidad.
-  SET segundo=(SELECT e.orden FROM detalle_ensamble e WHERE e.detalle_proyecto_idDetalle_proyecto=detalle AND e.Procesos_idproceso=procesoPasar);
-  #SELECT (SELECT e.orden FROM detalle_ensamble e WHERE e.idDetalle_ensamble=id), (SELECT e.orden FROM detalle_ensamble e WHERE e.detalle_proyecto_idDetalle_proyecto=detalle AND e.Procesos_idproceso=procesoPasar);
-  #...
-  #..Hay que tener en cuenta la validacion de las cantidades de los procesos. Las cantidades terminadas y las cantidades restantes
-  #el orden del primero es mayor que el segundo 
-  IF primero>segundo THEN #Devolicion de cantidades
-  	#A las cantidades terminadas de este proceso se le restan las cantidades ingresadas y a las cantidades restantes se le suma la cantidad ingresada...
-    #Validar si existe un proceso que este intermedio al orden previamente definido.
-    IF EXISTS(SELECT * FROM detalle_ensamble e WHERE e.detalle_proyecto_idDetalle_proyecto=detalle AND (e.orden BETWEEN segundo AND primero) AND e.orden!=segundo AND e.orden!=primero AND e.orden!=0) THEN
-    #Tiene procesos intermedios
-    	SELECT 1;
-    ELSE
-    #No tiene procesos intermedios
-    	#Restar a las cantidades terminadas los dos proceso(primero y segundo) la cantidad ingresada (hay que validar la cantidad ingresada primero).
-        SET cantidadP=(SELECT (CONVERT((SELECT e.cantidad_terminada FROM detalle_ensamble e WHERE e.idDetalle_ensamble=(SELECT e.idDetalle_ensamble FROM detalle_ensamble e WHERE e.detalle_proyecto_idDetalle_proyecto=detalle AND e.Procesos_idproceso=procesoPasar)), int)-cantidadTerminada) AS CantDevolucion);
-        #...
-        IF cantidadP>=0 THEN
-            #Consultar el id del proceso primario para realizar el stop de la toma de tiempo y validar la cantidad que tiene terminada para saber si es necesario cambiar el estado del proceso a "Por iniciar".
-            UPDATE detalle_ensamble f SET  f.estado_idestado=est,f.tiempo_total_por_proceso=tiempo,f.noperarios=0 WHERE f.idDetalle_ensamble=id;
-            #consultar identificador de la linea a modificar del proceso al cual se le devuelven las cantidades
-            SET id= (SELECT e.idDetalle_ensamble FROM detalle_ensamble e WHERE e.detalle_proyecto_idDetalle_proyecto=detalle AND e.Procesos_idproceso=procesoPasar);
-            #...
-            SET restanteProcesoA=(SELECT e.restantes FROM detalle_ensamble e WHERE e.idDetalle_ensamble=id);
-            #Modificar la información del proceso al cual se le devuleven las cantidades 
-            UPDATE detalle_ensamble e SET e.cantidad_terminada=cantidadP,e.restantes=(restanteProcesoA+cantidadTerminada) WHERE e.idDetalle_ensamble=id;
-            #...
-            #SELECT (res+cantidadTerminada);
-            SELECT cantidadP;
-            #...
-        ELSE        
-        	SELECT 01;
-        END IF;
-    	#SELECT 4;
-    END IF;
-    #...
-  ELSE #Paso de cantidades
-  	#A las cantidades terminadas de este proceso se le suman las cantidades ingresadas y a las cantidades restantes se le resta la cantidad ingresada...
-    #Validar si existe un proceso que este intermedio al orden previamente definido.
-    IF EXISTS(SELECT * FROM detalle_ensamble e WHERE e.detalle_proyecto_idDetalle_proyecto=detalle AND (e.orden BETWEEN primero AND segundo) AND e.orden!=segundo AND e.orden!=primero AND e.orden!=0) THEN
-    	#Se le suma y se resta las cantidades ingresadas a los campos estipulados en la sentencia anterior
-    	SELECT 2;
-        #Recorrer y modificar los campos intermedios de los procesos que se comunican, y modificar el que hace la acción.| 
-    ELSE
-    	#Solo se le raliza la suma y resta de cantidades al campo que pasando las cantidades.
-   		UPDATE detalle_ensamble f SET  f.estado_idestado=est, f.tiempo_total_por_proceso=tiempo,f.cantidad_terminada=(cantidadTerminada+cantidadAntiguaTermianda),f.restantes=res,f.noperarios=0 WHERE f.idDetalle_ensamble=id;
-        SELECT 4;
-    END IF;
-    #...
-  END IF;
-  #...
+  
+  UPDATE detalle_ensamble f SET  f.estado_idestado=est, f.tiempo_total_por_proceso=tiempo,f.cantidad_terminada=cantidad,f.restantes=res,f.noperarios=0 WHERE f.idDetalle_ensamble=id ;
+  
   END IF; 
  END IF;
 END IF;
@@ -1354,21 +1292,21 @@ IF busqueda=1 THEN
 
 SET id=(SELECT f.idDetalle_formato_estandar from detalle_formato_estandar f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=4);
  
- UPDATE detalle_formato_estandar f SET  f.estado_idestado=est,f.fecha_fin=now(),f.tiempo_total_por_proceso=tiempo,f.cantidad_terminada=(cantidadTerminada+cantidadAntiguaTermianda),f.restantes=res,f.noperarios=0 WHERE f.idDetalle_formato_estandar=id ;
+ UPDATE detalle_formato_estandar f SET  f.estado_idestado=est,f.fecha_fin=CURRENT_DATE,f.tiempo_total_por_proceso=tiempo,f.cantidad_terminada=cantidad,f.restantes=res,f.noperarios=0 WHERE f.idDetalle_formato_estandar=id ;
 
 ELSE
  IF busqueda=2 THEN
  
  SET id=(SELECT f.idDetalle_teclados from detalle_teclados f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=4);
  
- UPDATE detalle_teclados f SET  f.estado_idestado=est,f.fecha_fin=now(), f.tiempo_total_proceso=tiempo, f.cantidad_terminada=(cantidadTerminada+cantidadAntiguaTermianda),f.restantes=res,f.noperarios=0 WHERE f.idDetalle_teclados=id ;
+ UPDATE detalle_teclados f SET  f.estado_idestado=est,f.fecha_fin=CURRENT_DATE, f.tiempo_total_proceso=tiempo, f.cantidad_terminada=cantidad,f.restantes=res,f.noperarios=0 WHERE f.idDetalle_teclados=id ;
  
  ELSE
   IF busqueda=3 THEN
   
   SET id=(SELECT f.idDetalle_ensamble from detalle_ensamble f JOIN detalle_proyecto d on f.detalle_proyecto_idDetalle_proyecto=d.idDetalle_proyecto where d.proyecto_numero_orden=orden AND d.idDetalle_proyecto=detalle and f.Procesos_idproceso=lector and f.estado_idestado=4);
   
-  UPDATE detalle_ensamble f SET  f.estado_idestado=est,f.fecha_fin=now(), f.tiempo_total_por_proceso=tiempo,f.cantidad_terminada=(cantidadTerminada+cantidadAntiguaTermianda),f.restantes=res,f.noperarios=0 WHERE f.idDetalle_ensamble=id;
+  UPDATE detalle_ensamble f SET  f.estado_idestado=est,f.fecha_fin=CURRENT_DATE, f.tiempo_total_por_proceso=tiempo,f.cantidad_terminada=cantidad,f.restantes=res,f.noperarios=0 WHERE f.idDetalle_ensamble=id;
   
   END IF; 
  END IF;
@@ -1431,7 +1369,6 @@ UPDATE detalle_proyecto SET pro_Ejecucion=cantidadp WHERE idDetalle_proyecto=det
 SET cantidadp =(SELECT COUNT(*) FROM detalle_ensamble d WHERE  d.detalle_proyecto_idDetalle_proyecto=(detalle) AND d.estado_idestado=3);
 
 UPDATE detalle_proyecto SET pro_Terminado=cantidadp WHERE idDetalle_proyecto=detalle;
-  #...
   
   END IF;
  END IF;
@@ -1831,7 +1768,6 @@ BEGIN
 
 IF op=1 THEN
 
-
  SELECT d.canitadad_total FROM detalle_proyecto d WHERE d.proyecto_numero_orden=orden and d.idDetalle_proyecto=detalle;
 
 else
@@ -1917,15 +1853,6 @@ RETURN 1;
 ELSE
 RETURN 0;
 END IF;
-END$$
-
-CREATE DEFINER=`root`@`localhost` FUNCTION `FU_ActualizarLiderProyectoEnsamble` (`detalle` INT, `doc` VARCHAR(13)) RETURNS INT(1) NO SQL
-BEGIN
-
-#Numero de documento de identidad de la persona encargada de un procto de un proyeto.
-UPDATE detalle_proyecto d SET d.lider_proyecto=doc WHERE d.idDetalle_proyecto=detalle;
-
-return 1;
 END$$
 
 CREATE DEFINER=`root`@`localhost` FUNCTION `FU_CambiarContraseña` (`doc` VARCHAR(13), `contra` VARCHAR(20), `anti` VARCHAR(20)) RETURNS TINYINT(1) NO SQL
@@ -2347,22 +2274,11 @@ CREATE TABLE `detalle_ensamble` (
   `detalle_proyecto_idDetalle_proyecto` int(11) NOT NULL,
   `Procesos_idproceso` tinyint(4) NOT NULL,
   `estado_idestado` tinyint(4) NOT NULL,
-  `hora_ejecucion` varchar(19) DEFAULT NULL,
-  `hora_terminacion` varchar(19) DEFAULT NULL,
+  `hora_ejecucion` time DEFAULT NULL,
+  `hora_terminacion` time DEFAULT NULL,
   `restantes` int(6) NOT NULL DEFAULT '0',
-  `noperarios` tinyint(2) NOT NULL DEFAULT '0',
-  `orden` tinyint(1) NOT NULL DEFAULT '0'
+  `noperarios` tinyint(2) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `detalle_ensamble`
---
-
-INSERT INTO `detalle_ensamble` (`idDetalle_ensamble`, `tiempo_por_unidad`, `tiempo_total_por_proceso`, `cantidad_terminada`, `fecha_inicio`, `fecha_fin`, `detalle_proyecto_idDetalle_proyecto`, `Procesos_idproceso`, `estado_idestado`, `hora_ejecucion`, `hora_terminacion`, `restantes`, `noperarios`, `orden`) VALUES
-(5, '00:00', '49:47', '1', '2018-11-29', NULL, 2, 15, 2, '2018-11-29 16:21:20', '2018-11-29 16:21:24', 299, 0, 1),
-(6, '00:00', '133:16', '0', '2018-11-29', NULL, 2, 16, 4, '2018-11-29 16:20:51', '2018-11-29 16:20:52', 300, 1, 2),
-(7, '00:00', '00:08', '0', '2018-11-29', NULL, 2, 17, 2, '2018-11-29 15:58:33', '2018-11-29 15:58:34', 300, 0, 3),
-(8, '00:00', '00:01', '0', '2018-11-29', NULL, 2, 18, 2, '2018-11-29 15:57:51', '2018-11-29 15:57:52', 0, 0, 4);
 
 -- --------------------------------------------------------
 
@@ -2380,25 +2296,11 @@ CREATE TABLE `detalle_formato_estandar` (
   `detalle_proyecto_idDetalle_proyecto` int(11) NOT NULL,
   `Procesos_idproceso` tinyint(4) NOT NULL,
   `estado_idestado` tinyint(4) NOT NULL,
-  `hora_ejecucion` varchar(19) DEFAULT NULL,
-  `hora_terminacion` varchar(19) DEFAULT NULL,
+  `hora_ejecucion` time DEFAULT NULL,
+  `hora_terminacion` time DEFAULT NULL,
   `restantes` int(6) NOT NULL DEFAULT '0',
   `noperarios` tinyint(2) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `detalle_formato_estandar`
---
-
-INSERT INTO `detalle_formato_estandar` (`idDetalle_formato_estandar`, `tiempo_por_unidad`, `tiempo_total_por_proceso`, `cantidad_terminada`, `fecha_inicio`, `fecha_fin`, `detalle_proyecto_idDetalle_proyecto`, `Procesos_idproceso`, `estado_idestado`, `hora_ejecucion`, `hora_terminacion`, `restantes`, `noperarios`) VALUES
-(1, '00:00', '00:00', '0', NULL, NULL, 13, 1, 1, NULL, NULL, 0, 0),
-(2, '00:00', '00:00', '0', NULL, NULL, 13, 2, 1, NULL, NULL, 0, 0),
-(3, '00:00', '00:00', '0', NULL, NULL, 13, 3, 1, NULL, NULL, 0, 0),
-(4, '00:00', '00:00', '0', NULL, NULL, 13, 4, 1, NULL, NULL, 0, 0),
-(5, '00:00', '00:00', '0', NULL, NULL, 13, 5, 1, NULL, NULL, 0, 0),
-(6, '00:00', '00:00', '0', NULL, NULL, 13, 7, 1, NULL, NULL, 0, 0),
-(7, '00:00', '00:00', '0', NULL, NULL, 13, 8, 1, NULL, NULL, 0, 0),
-(8, '00:00', '00:00', '0', NULL, NULL, 13, 10, 1, NULL, NULL, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -2422,17 +2324,8 @@ CREATE TABLE `detalle_proyecto` (
   `pro_Terminado` tinyint(10) DEFAULT '0',
   `tiempo_total` varchar(20) DEFAULT NULL,
   `Total_timepo_Unidad` varchar(20) DEFAULT NULL,
-  `fecha_salida` datetime DEFAULT NULL,
-  `lider_proyecto` varchar(13) DEFAULT NULL
+  `fecha_salida` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `detalle_proyecto`
---
-
-INSERT INTO `detalle_proyecto` (`idDetalle_proyecto`, `tipo_negocio_idtipo_negocio`, `canitadad_total`, `material`, `proyecto_numero_orden`, `negocio_idnegocio`, `estado_idestado`, `PNC`, `ubicacion`, `pro_porIniciar`, `pro_Ejecucion`, `pro_Pausado`, `pro_Terminado`, `tiempo_total`, `Total_timepo_Unidad`, `fecha_salida`, `lider_proyecto`) VALUES
-(2, 1, '300', NULL, 31344, 3, 4, 0, NULL, 0, 1, 3, 0, '183:12', '00:00', NULL, '1216727816'),
-(13, 1, '10', 'TH', 31745, 1, 1, 0, NULL, 8, 0, 0, 0, '00:00', '00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2450,8 +2343,8 @@ CREATE TABLE `detalle_teclados` (
   `detalle_proyecto_idDetalle_proyecto` int(11) NOT NULL,
   `Procesos_idproceso` tinyint(4) NOT NULL,
   `estado_idestado` tinyint(4) NOT NULL,
-  `hora_ejecucion` varchar(19) DEFAULT NULL,
-  `hora_terminacion` varchar(19) DEFAULT NULL,
+  `hora_ejecucion` time DEFAULT NULL,
+  `hora_terminacion` time DEFAULT NULL,
   `restantes` int(6) NOT NULL DEFAULT '0',
   `noperarios` tinyint(2) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -2592,14 +2485,6 @@ CREATE TABLE `proyecto` (
   `NFEE` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Volcado de datos para la tabla `proyecto`
---
-
-INSERT INTO `proyecto` (`numero_orden`, `usuario_numero_documento`, `nombre_cliente`, `nombre_proyecto`, `tipo_proyecto`, `FE`, `TE`, `IN`, `pcb_FE`, `pcb_TE`, `Conversor`, `Repujado`, `troquel`, `stencil`, `lexan`, `fecha_ingreso`, `fecha_entrega`, `fecha_salidal`, `ruteoC`, `antisolderC`, `estado_idestado`, `antisolderP`, `ruteoP`, `eliminacion`, `parada`, `entregaCircuitoFEoGF`, `entregaCOMCircuito`, `entregaPCBFEoGF`, `entregaPCBCom`, `novedades`, `estadoEmpresa`, `NFEE`) VALUES
-(31344, '98765201', 'QSTARS S.A.S', 'TARJETA MLDT', 'Normal', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, '2018-11-15 14:48:01', '2018-11-19', NULL, 0, 0, 4, 0, 0, 1, 1, NULL, NULL, NULL, NULL, NULL, 'A tiempo', NULL),
-(31745, '981130', 'afadfs', 'dzsdfzsdfzxc', 'Normal', 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, '2018-11-28 12:29:12', '2018-11-14', NULL, 0, 0, 1, 0, 0, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -2653,24 +2538,8 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`numero_documento`, `tipo_documento`, `nombres`, `apellidos`, `cargo_idcargo`, `imagen`, `estado`, `contraeña`, `sesion`, `recuperacion`) VALUES
-('1017156424', 'CC', 'YAZMIN ANDREA', 'GALEANO CASTAÑEDA', 3, '', 1, 'yazmin1987', 1, 'dñpgxp68@4'),
-('1017191779', 'CC', 'Sintia Liceth', 'Ossa Vasquez', 6, '', 0, '1017191779', 0, '51e-uiññl9'),
-('1020479554', 'CC', 'Sebastian', 'Gallego Perez', 3, NULL, 1, '1020479554', 1, '6wjnnjg5a-'),
-('1040044905', 'CC', 'Jose Daniel ', 'Grajales Carmona', 1, '', 1, '1040044905', 0, 'z9jmqbñ2kl'),
-('1078579715', 'CC', 'MAIBER DAVID ', 'GONZALEZ MERCADO ', 1, '', 0, '3108967039', 0, 'w7n8pjyhd8'),
-('1128266934', 'CC', 'Jhon Fredy', 'Velez Londoño', 4, '', 1, '1128266934', 0, '4elax2f2ub'),
-('1152210828', 'CC', 'PAULA ANDREA ', 'HERRERA ÁLVAREZ', 5, '', 1, '1152210828', 0, 'eimaumks9s'),
-('1152697088', 'CC', 'Diana Marcela', 'Patiño Cardona', 6, '', 1, '1152697088', 0, '1@zujadnñk'),
-('1216714539', 'CC', 'Maria alejandra ', 'zuluaga rivera', 6, '', 1, '1216714539', 0, '84@w8wli4a'),
-('123456789', 'CC', 'prueba', 'prueba', 2, '', 0, '123456789', 0, 'jfmhh0vq5b'),
-('42800589', 'CC', 'Juliana', 'Naranjo Henao', 6, '', 0, '42800589', 0, '-cnño-5wb4'),
-('43263856', 'CC', 'Paula Andrea', 'Lopez Gutierrrez', 1, '', 1, '43263856', 0, 'cxcx03ñkf4'),
-('43975208', 'CC', 'GLORIA ', 'JARAMILLO ', 2, '', 1, '43975208', 0, 'kbdnsdlciq'),
-('71268332', 'CC', 'Adimaro', 'Montoya', 3, '', 0, '71268332', 0, '1vr8s4th-@'),
 ('981130', 'CC', 'Juan David', 'Marulanda Paniagua', 4, '', 1, '98113053240juan', 0, '1u-hyppy60'),
-('98113053240', 'CC', 'Juan david', 'Marulanda Paniagua', 3, '', 1, '98113053240', 0, 'ue2282qgo1'),
-('98699433', 'CC', 'ANDRES CAMILO', 'BUITRAGO GÓMEZ', 1, '', 1, '98699433', 0, 'ñkzrv7l@uh'),
-('98765201', 'CC', 'EDISSON ANDRES', 'BARAHONA CASTRILLON', 6, '', 1, '98765201', 0, 'q1-4i3i99t');
+('98113053240', 'CC', 'Juan David', 'Marulanda Paniagua', 6, '', 1, '98113053240', 0, 'o51jn-60yw');
 
 -- --------------------------------------------------------
 
@@ -2688,17 +2557,8 @@ CREATE TABLE `usuariopuerto` (
 --
 
 INSERT INTO `usuariopuerto` (`documentousario`, `usuarioPuerto`) VALUES
-('43975208', 'COM5'),
-('1017156424', 'COM7'),
-('981130', 'COM3'),
-('71268332', 'COM1'),
-('1128266934', 'COM4'),
-('98765201', 'COM1'),
-('1216714539', 'COM7'),
-('1152697088', 'COM5'),
-('98113053240', 'COM4'),
-('123456789', 'COM7'),
-('1020479554', 'COM9');
+('981130', 'COM10'),
+('98113053240', 'COM10');
 
 --
 -- Índices para tablas volcadas
@@ -2833,19 +2693,19 @@ ALTER TABLE `cargo`
 -- AUTO_INCREMENT de la tabla `detalle_ensamble`
 --
 ALTER TABLE `detalle_ensamble`
-  MODIFY `idDetalle_ensamble` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `idDetalle_ensamble` smallint(6) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_formato_estandar`
 --
 ALTER TABLE `detalle_formato_estandar`
-  MODIFY `idDetalle_formato_estandar` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idDetalle_formato_estandar` smallint(6) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_proyecto`
 --
 ALTER TABLE `detalle_proyecto`
-  MODIFY `idDetalle_proyecto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `idDetalle_proyecto` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_teclados`
@@ -2875,7 +2735,7 @@ ALTER TABLE `procesos`
 -- AUTO_INCREMENT de la tabla `proyecto`
 --
 ALTER TABLE `proyecto`
-  MODIFY `numero_orden` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31746;
+  MODIFY `numero_orden` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29360;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_negocio`

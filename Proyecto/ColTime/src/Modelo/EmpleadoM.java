@@ -14,15 +14,16 @@ public class EmpleadoM {
     PreparedStatement ps=null;
     ResultSet rs=null;
     
-    public CachedRowSet consultarEmpleados(String doc){
+    public CachedRowSet consultarEmpleados(String doc,String name){
         try {
             conexion = new Conexion(2);//Base de datos SGN donde estan los empleados
             conexion.establecerConexion();
             con=conexion.getConexion();
             //...
-            String Qry= "CALL PA_ConsultarEmpleadosColtime(?);";
+            String Qry= "CALL PA_ConsultarEmpleadosColtime(?,?);";
             ps=con.prepareStatement(Qry);
             ps.setString(1, doc);
+            ps.setString(2, name);
             rs=ps.executeQuery();
             crs=new CachedRowSetImpl();
             crs.populate(rs);
@@ -44,9 +45,10 @@ public class EmpleadoM {
             conexion.establecerConexion();
             con=conexion.getConexion();
             //...
-            String Qry= "CALL PA_ConsultarEmpleadosColtime(?);";
+            String Qry= "CALL PA_ConsultarEmpleadosColtime(?,?);";
             ps=con.prepareStatement(Qry);
             ps.setString(1, doc);
+            ps.setString(2, "");
             rs=ps.executeQuery();
             //Estraer el nombre del empleado del resultado de la base de datos
             if(rs.next()){

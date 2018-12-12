@@ -13,6 +13,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import rojerusan.RSNotifyAnimated;
 
 public class ControlDelTiempo extends javax.swing.JFrame implements ActionListener {
@@ -27,15 +28,24 @@ public class ControlDelTiempo extends javax.swing.JFrame implements ActionListen
     //Variables---------------------------------------------------------------->
     int px = 0;
     int py = 0;
+    private int negocio=0;
     static int cantidad = 0, filas = 1, unidad = 14, conta = 8;
     boolean res = false;
-    ControlDelTiempo vista = null;
+    private ControlDelTiempo vista = null;
     CachedRowSet crs = null;
     public static int negocioFE = 0;
     public static int negocioTE = 0;
     public static int negocioIN = 0;
     Object VistaLeida = null;
 
+    public void setNegocio(int negocio) {
+        this.negocio = negocio;
+    }
+
+    public void setVista(ControlDelTiempo vista) {
+        this.vista = vista;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -44,6 +54,7 @@ public class ControlDelTiempo extends javax.swing.JFrame implements ActionListen
         jScrollPane1 = new javax.swing.JScrollPane();
         contenidoFE = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1456, 1456));
@@ -78,15 +89,32 @@ public class ControlDelTiempo extends javax.swing.JFrame implements ActionListen
         jPanel2.setBackground(new java.awt.Color(63, 179, 255));
         jPanel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/refresh.png"))); // NOI18N
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setFocusPainted(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 847, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(804, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 64, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(19, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -104,7 +132,7 @@ public class ControlDelTiempo extends javax.swing.JFrame implements ActionListen
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -138,6 +166,10 @@ public class ControlDelTiempo extends javax.swing.JFrame implements ActionListen
             this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        validarExitenciadeBotones(negocio, vista);//Actualizar la vista
+    }//GEN-LAST:event_jButton1ActionPerformed
     //Metodos para la campura del tiempo--------------------------------------->
 //    validarExitenciadeBotones(3,vista); Actualizar autimaticamente la vista, esta pendiente para una futura versión...
     //
@@ -164,6 +196,7 @@ public class ControlDelTiempo extends javax.swing.JFrame implements ActionListen
             }
             crs.close();
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
         }
     }
 
@@ -188,9 +221,10 @@ public class ControlDelTiempo extends javax.swing.JFrame implements ActionListen
             }
             vista.dispose();
         }
-        if (res) {
+//        if (res) {
             validarExitenciadeBotones(Integer.parseInt(datos[2]), vista);
-        }
+            negocio=Integer.parseInt(datos[2]);
+//        }
 //#------------------------------------------------------------------
     }
     
@@ -291,6 +325,7 @@ public class ControlDelTiempo extends javax.swing.JFrame implements ActionListen
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JPanel contenidoFE;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     public static javax.swing.JScrollPane jScrollPane1;

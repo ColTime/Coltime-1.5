@@ -32,7 +32,8 @@ public class EN extends javax.swing.JFrame implements Runnable {
     static String namesBeta[] = null, nombreProcesos[] = null;
     String beta = "N°Orden;Cant;Lider de proyecto", betaNames = "";
     Modelo obj = new Modelo();
-    Object row[] = new Object[20];//Proyectos
+    Object row[];//Proyectos
+    int cantTerminada=0;
     static int posProceso = 0, rep = 0, canColumnas = 0, soloUnaVez = 0;
     Thread hilo = null;
 
@@ -65,6 +66,9 @@ public class EN extends javax.swing.JFrame implements Runnable {
             for (int i = 0; i < namesBeta.length; i++) {
                 nuevaCadena += ";sub_" + namesBeta[i] + ";" + namesBeta[i];
             }
+            //Columnas de cantidad total terminada
+            nuevaCadena+=";relleno;Terminados;relleno;Restantes";
+            //...
             names = (beta + nuevaCadena).split(";");//Encabezado de las columnas
             //...
             //Modelo de la tabla con encabezados
@@ -89,7 +93,7 @@ public class EN extends javax.swing.JFrame implements Runnable {
             while (crs.next()) {
                 if (rep == 0) {
                     row[0] = crs.getString(1);//Numero de orden
-                    row[1] = crs.getString(2);//C.T
+                    row[1] = crs.getString(2);//Cant
 //                  row[2] = crs.getString(6);//Tipo de proyecto Esto ya no existe
                     row[2] = (crs.getString(7)==null?"-":consultarNombreEmpleadoLider(crs.getString(7)));//producto
                     cantidadTotatlUnidades += crs.getInt(2);
@@ -103,6 +107,11 @@ public class EN extends javax.swing.JFrame implements Runnable {
 //                        agregarNoperariosProceso();
                           estadoProcesos();
                     } else {
+                        //Cancular la cantidad total terminada
+                        row[names.length-3]=cantTerminada!=0?(Integer.parseInt(String.valueOf(row[1]))-cantTerminada):0;
+                        //Cantidad restante del proyecto
+                        row[names.length - 1] = Integer.parseInt(String.valueOf(row[1]))- Integer.parseInt(String.valueOf(row[names.length-3]));
+                        cantTerminada=0;
                         //Añade la fila al modelo de la tabla...
                         df.addRow(row);
                         totalProyectos++;
@@ -120,6 +129,12 @@ public class EN extends javax.swing.JFrame implements Runnable {
                 }
             }
             if (rep == 1) {
+                //Calcular la cantidad terminada total del proyecto
+                row[names.length-3]=cantTerminada!=0?(Integer.parseInt(String.valueOf(row[1]))-cantTerminada):0;
+                //Cantidad restante del proyecto
+                row[names.length-1]=Integer.parseInt(String.valueOf(row[1]))-cantTerminada;
+                cantTerminada = 0;
+                //Agregar la fila al modelo de la tabla...
                 df.addRow(row);
                 totalProyectos++;
                 rep = 0;
@@ -130,7 +145,7 @@ public class EN extends javax.swing.JFrame implements Runnable {
             df.addRow(row);
             jTReporte.setModel(df);
             jTReporte.setDefaultRenderer(Object.class, new Tabla());
-//            ColumnasAOcultar();
+            ColumnasAOcultar();
             row = null;
             namesBeta = null;
             nombreProcesos = null;
@@ -139,36 +154,17 @@ public class EN extends javax.swing.JFrame implements Runnable {
 //            JOptionPane.showMessageDialog(null, "Error: " + e);
         }
     }
-
-//    private void agregarNoperariosProceso() {
-//        try {
-//            int pos=consultarPosicionProceso(crs.getString(3));// Posiciòn del proceso
-//            row[pos-2] = "-";//Columna de relleno
-//            row[pos + 1] = crs.getString(8);//Cantidad de equipos restantes proceso
-//            row[pos] = crs.getString(4);//Numero de operarios
-//            row[pos - 1] = crs.getString(5);//Estado de proceso
-//        } catch (Exception e) {
-////            JOptionPane.showMessageDialog(null, "Error: " + e);
-//        }
-//    }
     
     private void estadoProcesos(){//Calcular la cantidad pasada queda pendiente
         try {
             int pos=consultarPosicionProceso(crs.getString(3));// Posiciòn del proceso
             row[pos - 1] = crs.getString(5);//Estado de proceso
             row[pos] = crs.getString(9);//Cantidades terminadas del proceso
+            cantTerminada+=crs.getInt(9);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,e);
         }
     }
-    
-//    private void cantidadesTerminadas(){
-//        try {
-//            int pos = consultarPosicionProceso(crs.getString(3));// Posiciòn del proceso
-//            row[pos - 1] = crs.getString(5);//Estado de proceso
-//        } catch (Exception e) {
-//        }
-//    }
 
     private void inicializarVector() {
         for (int i = 0; i < row.length; i++) {
@@ -183,7 +179,7 @@ public class EN extends javax.swing.JFrame implements Runnable {
     }
 
     private int consultarPosicionProceso(String nombreProceso) {
-        for (int i = 2; i <= names.length; i++) {
+        for (int i = 2; i <= names.length-1; i++) {
             if (names[i].equals(nombreProceso)) {
                 posProceso = i;
                 break;
@@ -204,34 +200,26 @@ public class EN extends javax.swing.JFrame implements Runnable {
     }
 
     private void ColumnasAOcultar() {
-        for (int i = 4; i <= (namesBeta.length*3)+namesBeta.length; i++) {
-//            if (i % 2 == 0) {
-//                jTReporte.getColumnModel().getColumn(i).setMinWidth(0);
-//                jTReporte.getColumnModel().getColumn(i).setMaxWidth(0);
-//                jTReporte.getTableHeader().getColumnModel().getColumn(i).setMaxWidth(0);
-//                jTReporte.getTableHeader().getColumnModel().getColumn(i).setMinWidth(0);
-//            }
-//              Ocultar columna de estado del proceso
+        for (int i = 3; i <= (namesBeta.length*2)+5; i++) {
+            if (i % 2 == 1) {
                 jTReporte.getColumnModel().getColumn(i).setMinWidth(0);
                 jTReporte.getColumnModel().getColumn(i).setMaxWidth(0);
                 jTReporte.getTableHeader().getColumnModel().getColumn(i).setMaxWidth(0);
                 jTReporte.getTableHeader().getColumnModel().getColumn(i).setMinWidth(0);
-//                Ocultar columna de estado del proceso
-                jTReporte.getColumnModel().getColumn(i+1).setMinWidth(0);
-                jTReporte.getColumnModel().getColumn(i+1).setMaxWidth(0);
-                jTReporte.getTableHeader().getColumnModel().getColumn(i+1).setMaxWidth(0);
-                jTReporte.getTableHeader().getColumnModel().getColumn(i+1).setMinWidth(0);
-                i=i+3;
+            }
         }
+        //...
+        //Numero de orden del proyecto...
+        jTReporte.getColumnModel().getColumn(0).setMinWidth(100);
+        jTReporte.getColumnModel().getColumn(0).setMaxWidth(100);
+        jTReporte.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(100);
+        jTReporte.getTableHeader().getColumnModel().getColumn(0).setMinWidth(100);
+        //Nombre del lider de proyecto
+        jTReporte.getColumnModel().getColumn(2).setMinWidth(300);
+        jTReporte.getColumnModel().getColumn(2).setMaxWidth(300);
+        jTReporte.getTableHeader().getColumnModel().getColumn(2).setMaxWidth(300);
+        jTReporte.getTableHeader().getColumnModel().getColumn(2).setMinWidth(300);
 //...
-        //Tipo de proyecto=2
-        jTReporte.getColumnModel().getColumn(2).setMinWidth(0);
-        jTReporte.getColumnModel().getColumn(2).setMaxWidth(0);
-        jTReporte.getTableHeader().getColumnModel().getColumn(2).setMaxWidth(0);
-        jTReporte.getTableHeader().getColumnModel().getColumn(2).setMinWidth(0);
-        //Lideres de proyectos=3
-        jTReporte.getColumnModel().getColumn(3).setMinWidth(300);
-        jTReporte.getColumnModel().getColumn(3).setMaxWidth(300);
     }
 
     @SuppressWarnings("unchecked")

@@ -5,9 +5,9 @@ import javax.sql.rowset.CachedRowSet;
 
 public class Empleado {
 
-    public CachedRowSet consultarEmpleado(String doc){
+    public CachedRowSet consultarEmpleado(String doc,String name){
         EmpleadoM obj=new EmpleadoM();
-        return obj.consultarEmpleados(doc);
+        return obj.consultarEmpleados(doc,name);
     }
     
     public String consultarNombreLiderProyecto(String doc){

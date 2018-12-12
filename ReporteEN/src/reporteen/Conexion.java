@@ -13,7 +13,7 @@ public class Conexion {
 
     public Conexion(int opData) {
         bd = (opData==1?"coltime":"sgn");
-        server = "jdbc:mysql://192.168.4.1:3306/" + bd;
+        server = "jdbc:mysql://192.168.4.173:3306/" + bd;
     }
 
     public void establecerConexion() {

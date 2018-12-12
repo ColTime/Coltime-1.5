@@ -32,6 +32,7 @@ public class detalleProyecto extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         this.permiso = permiso;
         this.cargo = cargo;
+        jLiderProyecto.setText(" ");
         cargarTabla();
         jTNombreCliente.setEditable(false);
         jTNombreProyecto.setEditable(false);
@@ -46,16 +47,14 @@ public class detalleProyecto extends javax.swing.JDialog {
         jTFechaIngreso4.setEditable(false);
         jLiderProyecto.setEditable(false);
         TDetalleProduccion.getTableHeader().setReorderingAllowed(false);
-        if(cargo==3){
+        if(cargo==3 && negocio==3){
            jLiderProyecto.setVisible(true);
            jBAgregarLider.setVisible(true);
            jLabel15.setVisible(true);
-           btnGuardarOrden.setVisible(true);
         }else{
            jLiderProyecto.setVisible(false);
            jBAgregarLider.setVisible(false);
            jLabel15.setVisible(false);
-           btnGuardarOrden.setVisible(false);
            this.setSize(1380, 460);
         }
         //jTTimepoTotalUnidad
@@ -105,8 +104,6 @@ public class detalleProyecto extends javax.swing.JDialog {
         jBAgregarLider = new javax.swing.JButton();
         jLiderProyecto = new elaprendiz.gui.textField.TextFieldRoundBackground();
         jLabel15 = new javax.swing.JLabel();
-        btnGuardarOrden = new elaprendiz.gui.button.ButtonAction();
-        jRadioButton1 = new javax.swing.JRadioButton();
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/retro.png"))); // NOI18N
         jMenuItem1.setText("Actualizar");
@@ -299,6 +296,7 @@ public class detalleProyecto extends javax.swing.JDialog {
         });
 
         jLiderProyecto.setBorder(null);
+        jLiderProyecto.setText("   ");
         jLiderProyecto.setColorDeBorde(new java.awt.Color(204, 204, 204));
         jLiderProyecto.setColorDeTextoBackground(new java.awt.Color(255, 255, 255));
         jLiderProyecto.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -306,16 +304,6 @@ public class detalleProyecto extends javax.swing.JDialog {
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(128, 128, 131));
         jLabel15.setText("Lider del proyecto EN");
-
-        btnGuardarOrden.setBackground(new java.awt.Color(51, 51, 255));
-        btnGuardarOrden.setText("Guardar");
-        btnGuardarOrden.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarOrdenActionPerformed(evt);
-            }
-        });
-
-        jRadioButton1.setText("jRadioButton1");
 
         javax.swing.GroupLayout jPInformacionLayout = new javax.swing.GroupLayout(jPInformacion);
         jPInformacion.setLayout(jPInformacionLayout);
@@ -373,10 +361,7 @@ public class detalleProyecto extends javax.swing.JDialog {
                             .addComponent(jTFechaIngreso4, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(94, 94, 94))
                     .addGroup(jPInformacionLayout.createSequentialGroup()
-                        .addComponent(btnGuardarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(167, 167, 167)
-                        .addComponent(jRadioButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLiderProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15))
@@ -444,11 +429,8 @@ public class detalleProyecto extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLiderProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGuardarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jRadioButton1))
-                        .addGap(16, 16, 16))
+                        .addComponent(jLiderProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPInformacionLayout.createSequentialGroup()
                         .addComponent(jBAgregarLider)
                         .addContainerGap())))
@@ -460,20 +442,18 @@ public class detalleProyecto extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, 1344, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1344, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, 1344, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPInformacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -492,7 +472,7 @@ public class detalleProyecto extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void TDetalleProduccionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TDetalleProduccionMouseClicked
-        //Botones de seguridad
+        //Botones de seguridad//El boton de reiniciar proceso hay que organizarlos procesos de ensamble
         String[] botones = {" SI ", " NO "};
         String v[];
         rows = TDetalleProduccion.rowAtPoint(evt.getPoint());
@@ -563,7 +543,7 @@ public class detalleProyecto extends javax.swing.JDialog {
                 }
             }else if(value instanceof JRadioButton){
                 JRadioButton radioBoton= (JRadioButton) value;
-                if(!radioBoton.isSelected()){
+                if(!radioBoton.isSelected() && radioBoton.isEnabled()){//Validar si se puede modificar el proceso inial para poder ejecutar la toma de tiempo
                     //Seleccionar Primer proceso del área...
                     DetalleProyecto obj = new DetalleProyecto();
                     v = radioBoton.getActionCommand().split("-");// Vector de una log maxima siempre de 2
@@ -604,32 +584,6 @@ public class detalleProyecto extends javax.swing.JDialog {
 
     private void TDetalleProduccionPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_TDetalleProduccionPropertyChange
     }//GEN-LAST:event_TDetalleProduccionPropertyChange
-
-    private void btnGuardarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarOrdenActionPerformed
-//        ArrayList<String> v=new ArrayList<String>();
-//        String aux="";
-//        //Recorrer la tabla para validar el orden de los procesos
-//        //Esto ya no se necesita
-//        for (int i = 0; i < TDetalleProduccion.getRowCount(); i++) {
-//            if(Integer.parseInt(String.valueOf(TDetalleProduccion.getValueAt(i, 15)))!=0){//Los procesos que tienen un orden 0 significa que no van hacer parte del proceso de desarrollo
-//                v.add(String.valueOf(TDetalleProduccion.getValueAt(i, 15))+"-"+String.valueOf(TDetalleProduccion.getValueAt(i, 16)));//Se agregar el orden y el ID del proceso de ensamble
-//                //Ordenar el vector...
-//                for (int j = 0; j < v.size() - 1; j++) {
-//                    for (int k = 0; k < v.size() - k - 1; k++) {
-//                        if (Integer.parseInt(v.get(j+1).split("-")[0]) < Integer.parseInt(v.get(j).split("-")[0])) {
-//                            aux = v.get(j+1);
-//                            v.set((j+1), v.get(j));
-//                            v.set(j, aux);
-//                        }
-//                    }
-//                }
-//                //...
-//                //Validar que siga el consecutivo de aumento de uno en uno
-//            }
-//        }
-//        //...
-//        System.out.println(v);//Mostramos el Array List
-    }//GEN-LAST:event_btnGuardarOrdenActionPerformed
 
     private void cargarTabla() {
         Tabla personalizar = new Tabla();
@@ -675,6 +629,15 @@ public class detalleProyecto extends javax.swing.JDialog {
         if(cargo!=4){
             editarTamañoColumnas();
         }
+        //Seleccion de orden de proceso inicial
+        if(cargo!=3){
+            //orden
+            TDetalleProduccion.getColumnModel().getColumn(15).setMinWidth(0);
+            TDetalleProduccion.getColumnModel().getColumn(15).setMaxWidth(0);
+            TDetalleProduccion.getTableHeader().getColumnModel().getColumn(15).setMaxWidth(0);
+            TDetalleProduccion.getTableHeader().getColumnModel().getColumn(15).setMinWidth(0);
+        }
+        
         //Boton parar toma de tiempo para almacen
         if (negocio != 4 || cargo !=5) {
             TDetalleProduccion.getColumnModel().getColumn(14).setMinWidth(0);
@@ -740,7 +703,6 @@ public class detalleProyecto extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TDetalleProduccion;
-    private elaprendiz.gui.button.ButtonAction btnGuardarOrden;
     private javax.swing.JButton jBAgregarLider;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -758,7 +720,6 @@ public class detalleProyecto extends javax.swing.JDialog {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPInformacion;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane3;
     public static elaprendiz.gui.textField.TextFieldRoundBackground jTCantidadTotal;
     public static elaprendiz.gui.textField.TextFieldRoundBackground jTFechaEntrega;

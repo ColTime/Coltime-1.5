@@ -23,14 +23,14 @@ public class Empleados extends javax.swing.JDialog {
     public Empleados(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        consultarEmpleadosOperarios("");
+        consultarEmpleadosOperarios("","");
     }
     //Variables...
     CachedRowSet crs;
     
-    private void consultarEmpleadosOperarios(String doc){
+    private void consultarEmpleadosOperarios(String doc,String name){
         Empleado obj=new Empleado();
-        crs= obj.consultarEmpleado(doc);
+        crs= obj.consultarEmpleado(doc,name);
         //
         try {
             String v[]={"Numero Documento","Nombre Empleado"};//Header de la tabla
@@ -45,7 +45,7 @@ public class Empleados extends javax.swing.JDialog {
                dft.addRow(v);
             }
             jTblEmpleado.setModel(dft);
-            jTblEmpleado.getTableHeader().setFont(new Font("Arial",1,15));
+            jTblEmpleado.getTableHeader().setFont(new Font("Arial",1,16));
             sizeColumnas();
             //...
         } catch (Exception e) {
@@ -83,8 +83,10 @@ public class Empleados extends javax.swing.JDialog {
             }
         };
         jPanel2 = new javax.swing.JPanel();
-        jLiderProyecto = new elaprendiz.gui.textField.TextFieldRoundBackground();
+        jLiderProyectoDocumento = new elaprendiz.gui.textField.TextFieldRoundBackground();
         jLabel4 = new javax.swing.JLabel();
+        jLiderProyectoName = new elaprendiz.gui.textField.TextFieldRoundBackground();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -112,25 +114,39 @@ public class Empleados extends javax.swing.JDialog {
 
         jPanel2.setBackground(new java.awt.Color(60, 141, 188));
 
-        jLiderProyecto.setBorder(null);
-        jLiderProyecto.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jLiderProyecto.setColorDeBorde(new java.awt.Color(204, 204, 204));
-        jLiderProyecto.setColorDeTextoBackground(new java.awt.Color(255, 255, 255));
-        jLiderProyecto.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLiderProyecto.addKeyListener(new java.awt.event.KeyAdapter() {
+        jLiderProyectoDocumento.setBorder(null);
+        jLiderProyectoDocumento.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jLiderProyectoDocumento.setColorDeBorde(new java.awt.Color(204, 204, 204));
+        jLiderProyectoDocumento.setColorDeTextoBackground(new java.awt.Color(255, 255, 255));
+        jLiderProyectoDocumento.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLiderProyectoDocumento.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jLiderProyectoKeyPressed(evt);
+                jLiderProyectoDocumentoKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                jLiderProyectoKeyReleased(evt);
+                jLiderProyectoDocumentoKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jLiderProyectoKeyTyped(evt);
+                jLiderProyectoDocumentoKeyTyped(evt);
             }
         });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("Numero de documento:");
+
+        jLiderProyectoName.setBorder(null);
+        jLiderProyectoName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jLiderProyectoName.setColorDeBorde(new java.awt.Color(204, 204, 204));
+        jLiderProyectoName.setColorDeTextoBackground(new java.awt.Color(255, 255, 255));
+        jLiderProyectoName.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLiderProyectoName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jLiderProyectoNameKeyReleased(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setText("Nombre empleado:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -139,17 +155,27 @@ public class Empleados extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLiderProyecto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLiderProyectoDocumento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLiderProyectoName, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLiderProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLiderProyectoName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLiderProyectoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -186,24 +212,24 @@ public class Empleados extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLiderProyectoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLiderProyectoKeyReleased
-        if (!jLiderProyecto.getText().equals("")) {
-            consultarEmpleadosOperarios(jLiderProyecto.getText());
+    private void jLiderProyectoDocumentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLiderProyectoDocumentoKeyReleased
+        if (!jLiderProyectoDocumento.getText().equals("") || !jLiderProyectoName.getText().equals("")) {
+            consultarEmpleadosOperarios(jLiderProyectoDocumento.getText(),jLiderProyectoName.getText());
         }else{
-            consultarEmpleadosOperarios("");
+            consultarEmpleadosOperarios("","");
         }
-    }//GEN-LAST:event_jLiderProyectoKeyReleased
+    }//GEN-LAST:event_jLiderProyectoDocumentoKeyReleased
 
-    private void jLiderProyectoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLiderProyectoKeyPressed
+    private void jLiderProyectoDocumentoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLiderProyectoDocumentoKeyPressed
         
-    }//GEN-LAST:event_jLiderProyectoKeyPressed
+    }//GEN-LAST:event_jLiderProyectoDocumentoKeyPressed
 
-    private void jLiderProyectoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLiderProyectoKeyTyped
+    private void jLiderProyectoDocumentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLiderProyectoDocumentoKeyTyped
         char v= evt.getKeyChar();
         if (Character.isLetter(v)) {
             evt.consume();
         }
-    }//GEN-LAST:event_jLiderProyectoKeyTyped
+    }//GEN-LAST:event_jLiderProyectoDocumentoKeyTyped
 
     private void jTblEmpleadoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblEmpleadoMousePressed
         //Se encarga de enviar la informacion a la vista de detalles.
@@ -218,6 +244,14 @@ public class Empleados extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_jTblEmpleadoMousePressed
+
+    private void jLiderProyectoNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLiderProyectoNameKeyReleased
+        if (!jLiderProyectoDocumento.getText().equals("") || !jLiderProyectoName.getText().equals("")) {
+            consultarEmpleadosOperarios(jLiderProyectoDocumento.getText(), jLiderProyectoName.getText());
+        } else {
+            consultarEmpleadosOperarios("", "");
+        }
+    }//GEN-LAST:event_jLiderProyectoNameKeyReleased
 
     /**
      * @param args the command line arguments
@@ -268,7 +302,9 @@ public class Empleados extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel4;
-    public static elaprendiz.gui.textField.TextFieldRoundBackground jLiderProyecto;
+    private javax.swing.JLabel jLabel5;
+    public static elaprendiz.gui.textField.TextFieldRoundBackground jLiderProyectoDocumento;
+    public static elaprendiz.gui.textField.TextFieldRoundBackground jLiderProyectoName;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

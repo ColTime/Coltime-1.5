@@ -91,17 +91,21 @@ public class ConexionPS {
                             //...
                             //Se encarga de escribir en un archivo plano los códigos que son leidos del puerto serial.
                             escribirRecepcionDatos(valorBeta);
-//                            System.out.println(valorBeta.split(";").length+"/"+valorBeta);
-                            if (valorBeta.split(";").length == 6 || valorBeta.split(";").length == 7) {//El codigo de operario siempre va a contener una longitud del vecto de 6 espaciós en la memoria EEPROM
-                                // obj.LecturaCodigoQR(valorBeta);//Función con bluetooth
+                            //...
+                            //La longitud del vector del codigo QR tiene que ser de 6 o 7 espacios, tambien el proceso que recibe tiene que ser diferente a 0 si el proceso no es 18="Empaque"
+                            String infoP[] = valorBeta.split(";");//Validar Código QR
+//                            if (infoP.length == 6 || (infoP.length == 7 && ((!infoP[6].equals("0") && !infoP[3].equals("18")) || ((infoP[6].equals("0") || !infoP[6].equals("18")) && infoP[3].equals("18"))))) {
+                            //El codigo de operario siempre va a contener una longitud del vecto de 6 espaciós en la memoria EEPROM
+                                //...
                                 if (Character.isDigit(valorBeta.charAt(1))) {//Valida que el valor de entrada sea el correcto//Funcionamiento con wifi
                                     //...
                                     obj.LecturaCodigoQR(valorBeta);//Se encargara de ler el codigo QR
+//                                    System.out.println(valorBeta);
                                     //--------------------------------------------------
                                     //Limpieza de la memoria Volatil RAM
                                     System.gc();//Garbage collector.  
                                 }
-                            }
+//                            }
                             //...
                         }
                         if (!menu.diponible) {

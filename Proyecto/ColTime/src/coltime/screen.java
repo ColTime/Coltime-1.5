@@ -63,7 +63,7 @@ public class screen extends javax.swing.JFrame implements Runnable {
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel4.setText("Versión 1.3 ");
+        jLabel4.setText("Versión 1.5 ");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(83, 83, 83));
@@ -74,7 +74,7 @@ public class screen extends javax.swing.JFrame implements Runnable {
         jLabel5.setBackground(new java.awt.Color(102, 102, 102));
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel5.setText("Última actualización: 28-09-2018");
+        jLabel5.setText("Última actualización: 11-12-2018");
 
         jLabel6.setBackground(new java.awt.Color(102, 102, 102));
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -178,9 +178,9 @@ public class screen extends javax.swing.JFrame implements Runnable {
     public void run() {
         while (tiempo != null) {
             try {
-//                Thread.sleep(5000);//5000
+                Thread.sleep(5000);//5000
                 this.dispose();
-//                Thread.sleep(200);//500
+                Thread.sleep(200);//500
                 Menu men = new Menu(Integer.parseInt(jLCargo.getText()),jLNombreUsuario.getText(),this.jDocumento.getText());
                 men.setVisible(true);
                 

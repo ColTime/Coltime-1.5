@@ -142,7 +142,7 @@ public class DetalleProyectoM {
                     if (!negocio.equals("ALMACEN")) {
                         tipo = numeroDelTipo(tipoNegocio);
                     }
-
+                    //...
                     if (negocio.equals("IN")) {//tener en cuenta que los procesos se ban a traer de la tabla procesos dependiendo del tipo de negocio!!
                         //Se registran los procesos de IN para este subproyecto.
                         Qry = "CALL PA_ConsultarIDProcesosTEYEN(?)";//Se van a consultar lo procesos de IN.
@@ -645,6 +645,29 @@ public class DetalleProyectoM {
             JOptionPane.showMessageDialog(null, "¡Error!" + e);
         }
         return crs;
+    }
+    
+    public boolean consultarEstadoDetalleProyectoM(int detalle) {
+        try {
+            conexion = new Conexion(1);
+            conexion.establecerConexion();
+            con = conexion.getConexion();
+            //Query------------------------------------------------------------>
+            String Qry = "SELECT FU_ConsultarEstadoDetalleProyecto(?)";
+            ps = con.prepareStatement(Qry);
+            ps.setInt(1, detalle);
+            rs = ps.executeQuery();
+            rs.next();
+            res=rs.getBoolean(1);
+            //Cierre de conexiones
+            conexion.cerrar(rs);
+            conexion.destruir();
+            ps.close();
+            con.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "¡Error!" + e);
+        }
+        return res;
     }
 
     public boolean ReiniciarDetalle(int detalle, int negocio, int detalleproducto) {

@@ -50,19 +50,24 @@ public boolean iniciar_Pausar_Reiniciar_Toma_Tiempo(int orden, int detalle, int 
             if (rs.getBoolean(1)) {//Pausar O IniciarToma de tiempos
                 //-------------------------------------------------------------->
                 if(negocio==3){
-                    //Validar que la cantidad ingresada por el operario sea igual o menor a la cantidad que tiene disponible este proceso para trabajar
-                    Qry="SELECT FU_ValidarCantidadParaProcesosEnsamble(?,?);";
-                    ps=con.prepareStatement(Qry);
-                    ps.setInt(1, detalle);
-                    ps.setInt(2, lector);
-                    rs=ps.executeQuery();
-                    if(rs.next()){
-                        if(cantidadTerminada<=Integer.parseInt(rs.getString(1))){
-                            accion=true;
-                        }else{
-                            accion=false;
+                    //Validar el sub proceso al cual se va a enviar la informacion
+//                    if((procesoPasoCantidades!=0 && lector!=18) || ((procesoPasoCantidades==0 || procesoPasoCantidades!=18) && lector==18)){
+                        //Validar que la cantidad ingresada por el operario sea igual o menor a la cantidad que tiene disponible este proceso para trabajar
+                        Qry = "SELECT FU_ValidarCantidadParaProcesosEnsamble(?,?);";
+                        ps = con.prepareStatement(Qry);
+                        ps.setInt(1, detalle);
+                        ps.setInt(2, lector);
+                        rs = ps.executeQuery();
+                        if (rs.next()) {
+                            if (cantidadTerminada <= rs.getInt(1)) {
+                                accion = true;
+                            } else {
+                                accion = false;
+                            }
                         }   
-                    }
+//                    }else{
+//                        accion=false;
+//                    }
                 }
                 //...
                 int restante=0;
@@ -102,7 +107,7 @@ public boolean iniciar_Pausar_Reiniciar_Toma_Tiempo(int orden, int detalle, int 
                         //---------
                         // si el estado es dos o tres (2 o 3) procedera a realizar la actualización. 31344;2;3;16;1;1  
                     }else{//Si el área de produccion es "3"=Ensamble entonces no va a realizar el calcular el estado del proceso desde el modelos sino desde la base de datos de una manera diferente.
-                        estado=-1;
+                        estado=2;
                     }
                   //...
                 }else{
@@ -134,11 +139,7 @@ public boolean iniciar_Pausar_Reiniciar_Toma_Tiempo(int orden, int detalle, int 
                     ps.setInt(8, estado);
                     ps.setInt(9, restante);//Cantidad de productos restantes!!
                     ps.setInt(10, procesoPasoCantidades);
-                    ps.execute();//Respuesta es igual a True para poder agregar los botones
-//                    rs=ps.executeQuery();
-//                    rs.next();
-//                    System.out.println(rs.getObject(1));//Orden del primer proceso
-//                    System.out.println(rs.getObject(2));//Orden del segundo proceso
+                    ps.execute();//Respuesta es igual a True para poder agregar los botones, Ya no es necesario esta respuesta para buscar los botones
                     res=true;
                     //Promedio de producto por minuto.
                     cantidadProductoMinuto(detalle, negocio, lector);
@@ -147,48 +148,6 @@ public boolean iniciar_Pausar_Reiniciar_Toma_Tiempo(int orden, int detalle, int 
                     //Timepo total por unidad...
                     totalTiempoPorUnidad(detalle, negocio);
                     //Si no cumple la condición va a retornar un falso y monstrara una mensaje de advertencia.
-                    //...
-                    //¿El negocio es de ensamble?
-//                    if(negocio==3){//Esto ya no es necesario, se puede hacer directamente desde el procedimiento
-//                        
-////                        int cantidadT1=0;
-////                        int cantidadT2=0;
-////                        int total=0;
-////                        //Consultar Los proceso que tiene el producto como tal y realizar el calculo de paso de cantidades.
-////                        Qry="CALL PA_ConsultarProcesoProductoEnsamble(?);";
-////                        ps=con.prepareStatement(Qry);
-////                        ps.setInt(1, detalle);
-////                        rs=ps.executeQuery();
-////                        ArrayList<String> cantProceso=new ArrayList<String>();//Cantidad que se encuentra en el proceso - idProceso
-////                        //Recorremos cada uno de los proceso del producto que hace parte del proyecto que esta en ensamble
-////                        while(rs.next()){
-////                            //...
-////                            if(rs.getInt(3)==1){//¿Es el primer proceso que se ejecuta?
-////                              //Consultar La cantidad base del proyecto
-////                              cantProceso.add(rs.getInt(5)+"-"+rs.getInt(1));//En la posicion 0 Siempre va estar la cantidad base
-////                              cantidadT1=rs.getInt(4);//Cantidad terminada del primer proceso
-////                            }else{//Para el resto de los procesos
-////                                if(Integer.parseInt(cantProceso.get(0).split("-")[0])>0){//La cantidad base es mayor a 0
-////                                    cantidadT2=rs.getInt(4);//Cantidad terminada del siguiente proceso
-////                                    total=cantidadT1-cantidadT2;//Cantidad que tiene el sigueinte proceso
-////                                    cantProceso.add(total+"-"+rs.getInt(1));//se colocal el total en el vector
-////                                    cantidadT1=rs.getInt(4);//Cantidad Terminada del proceso
-////                                }
-////                            }
-////                        }
-////                        //Montar esta informacion a la base de datos
-////                        for (String pos : cantProceso) {
-//////                            System.out.println(pos);
-////                            String v[];
-////                            v=pos.split("-");//0=Cantidades que tiene cada proceso y 1= ID del proceso del area de ensamble
-////                            Qry="CALL PA_ActualziarCantidadProcesosEnsamble(?,?);";
-////                            ps=con.prepareStatement(Qry);
-////                            ps.setInt(1, Integer.parseInt(v[1]));
-////                            ps.setString(2, v[0]);
-////                            ps.execute();
-////                        }
-////                        System.out.println(cantProceso);
-//                    }
                     //...
                 } else {
                     res = false;
