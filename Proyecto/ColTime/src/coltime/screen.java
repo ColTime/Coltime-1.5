@@ -74,7 +74,7 @@ public class screen extends javax.swing.JFrame implements Runnable {
         jLabel5.setBackground(new java.awt.Color(102, 102, 102));
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel5.setText("Última actualización: 11-12-2018");
+        jLabel5.setText("Última actualización: 16-01-2019");
 
         jLabel6.setBackground(new java.awt.Color(102, 102, 102));
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N

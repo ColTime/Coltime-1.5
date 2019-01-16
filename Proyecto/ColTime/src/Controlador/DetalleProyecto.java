@@ -86,10 +86,16 @@ public class DetalleProyecto {
         return obj.consultarDetallesM(area,op);
     }
 
-    //Reporte general
+    //Reporte general sobre el status del proyecto
     public CachedRowSet generar_Reportes() {
         DetalleProyectoM obj = new DetalleProyectoM();
         return obj.generar_ReportesM();
+    }
+    
+    //Reporte de tiempos de cada una de las áreas de producción.
+    public CachedRowSet generarReporteAreaTiempos(int area){
+        DetalleProyectoM obj = new DetalleProyectoM();
+        return obj.generarReporteAreaTiemposM(area);
     }
 
     //Consulta los detalles del proyecto

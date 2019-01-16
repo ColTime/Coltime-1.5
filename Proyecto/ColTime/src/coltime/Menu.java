@@ -9,10 +9,12 @@ import Controlador.Proyecto;
 import Controlador.Usuario;
 import Controlador.generarXlsx;
 import Vistas.CambiarContraseña;
+import Vistas.ClausulasPrivacidad;
 import Vistas.ControlDelTiempo;
 import Vistas.DetallesAreaInfo;
 import Vistas.Producciones;
 import Vistas.Inicio;
+import Vistas.Operarios;
 import Vistas.Procesos;
 import Vistas.Usuarios1;
 import Vistas.proyecto;
@@ -124,10 +126,12 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
         jPanel1 = new javax.swing.JPanel();
         jPSuperior = new javax.swing.JPanel();
         btnMenu = new javax.swing.JButton();
+        jDocumento = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jBMinimizar = new javax.swing.JButton();
-        jDocumento = new javax.swing.JLabel();
         jLConexion = new javax.swing.JLabel();
+        btnClausulasPrivacidad = new javax.swing.JButton();
         jPMenu = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jLEstadoLectura = new javax.swing.JLabel();
@@ -139,6 +143,7 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
         btn3 = new rsbuttom.RSButtonMetro();
         btn5 = new rsbuttom.RSButtonMetro();
         btn6 = new rsbuttom.RSButtonMetro();
+        btn7 = new rsbuttom.RSButtonMetro();
         jPContenido = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -261,6 +266,11 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
             }
         });
 
+        jDocumento.setText("jLabel1");
+
+        jPanel9.setBackground(new java.awt.Color(60, 141, 188));
+        jPanel9.setLayout(null);
+
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/close.png"))); // NOI18N
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
@@ -271,6 +281,8 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
                 jButton1ActionPerformed(evt);
             }
         });
+        jPanel9.add(jButton1);
+        jButton1.setBounds(77, 0, 23, 24);
 
         jBMinimizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/minus1.png"))); // NOI18N
         jBMinimizar.setBorderPainted(false);
@@ -282,12 +294,28 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
                 jBMinimizarActionPerformed(evt);
             }
         });
-
-        jDocumento.setText("jLabel1");
+        jPanel9.add(jBMinimizar);
+        jBMinimizar.setBounds(48, 0, 23, 24);
 
         jLConexion.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLConexion.setForeground(new java.awt.Color(51, 255, 51));
         jLConexion.setText("Linea");
+        jPanel9.add(jLConexion);
+        jLConexion.setBounds(70, 30, 30, 14);
+
+        btnClausulasPrivacidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/estadoLectura.png"))); // NOI18N
+        btnClausulasPrivacidad.setBorderPainted(false);
+        btnClausulasPrivacidad.setContentAreaFilled(false);
+        btnClausulasPrivacidad.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnClausulasPrivacidad.setFocusPainted(false);
+        btnClausulasPrivacidad.setFocusable(false);
+        btnClausulasPrivacidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClausulasPrivacidadActionPerformed(evt);
+            }
+        });
+        jPanel9.add(btnClausulasPrivacidad);
+        btnClausulasPrivacidad.setBounds(40, 24, 20, 20);
 
         javax.swing.GroupLayout jPSuperiorLayout = new javax.swing.GroupLayout(jPSuperior);
         jPSuperior.setLayout(jPSuperiorLayout);
@@ -296,33 +324,24 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
             .addGroup(jPSuperiorLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPSuperiorLayout.createSequentialGroup()
-                        .addGap(275, 275, 275)
-                        .addComponent(jDocumento)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBMinimizar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPSuperiorLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLConexion)))
-                .addGap(209, 209, 209))
+                .addGap(275, 275, 275)
+                .addComponent(jDocumento)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(196, 196, 196))
         );
         jPSuperiorLayout.setVerticalGroup(
             jPSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPSuperiorLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(jPSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPSuperiorLayout.createSequentialGroup()
+                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPSuperiorLayout.createSequentialGroup()
-                        .addGroup(jPSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
-                            .addGroup(jPSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jDocumento)
-                                .addComponent(jBMinimizar)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLConexion))))
+                        .addGap(10, 10, 10)
+                        .addComponent(jDocumento))))
         );
 
         jPMenu.setBackground(new java.awt.Color(219, 219, 219));
@@ -450,7 +469,7 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
                 btn5ActionPerformed(evt);
             }
         });
-        jPMenu.add(btn5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 190, 42));
+        jPMenu.add(btn5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 357, 190, 42));
 
         btn6.setForeground(new java.awt.Color(128, 128, 131));
         btn6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/procesos.png"))); // NOI18N
@@ -470,7 +489,27 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
                 btn6ActionPerformed(evt);
             }
         });
-        jPMenu.add(btn6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 278, 190, 42));
+        jPMenu.add(btn6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 317, 190, 42));
+
+        btn7.setForeground(new java.awt.Color(128, 128, 131));
+        btn7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/operarios.png"))); // NOI18N
+        btn7.setText("OPERARIOS");
+        btn7.setBorderPainted(false);
+        btn7.setColorHover(new java.awt.Color(189, 189, 189));
+        btn7.setColorNormal(new java.awt.Color(219, 219, 219));
+        btn7.setColorPressed(new java.awt.Color(189, 189, 189));
+        btn7.setColorTextHover(new java.awt.Color(128, 128, 131));
+        btn7.setColorTextNormal(new java.awt.Color(128, 128, 131));
+        btn7.setColorTextPressed(new java.awt.Color(128, 128, 131));
+        btn7.setFocusable(false);
+        btn7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btn7.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btn7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn7ActionPerformed(evt);
+            }
+        });
+        jPMenu.add(btn7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 278, 190, 42));
 
         jPContenido.setLayout(new javax.swing.BoxLayout(jPContenido, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -487,7 +526,7 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 631, Short.MAX_VALUE)
+            .addGap(0, 648, Short.MAX_VALUE)
         );
 
         jPContenido.add(jPanel2);
@@ -1192,6 +1231,10 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
             btn6.setColorHover(cor);
             btn6.setColorNormal(corF);
             btn6.setColorPressed(cor);
+            
+            btn7.setColorHover(cor);
+            btn7.setColorNormal(corF);
+            btn7.setColorPressed(cor);
         } else {
             btn2.setColorHover(cor);
             btn2.setColorNormal(cor);
@@ -1285,6 +1328,10 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
             btn6.setColorHover(cor);
             btn6.setColorNormal(corF);
             btn6.setColorPressed(cor);
+            
+            btn7.setColorHover(cor);
+            btn7.setColorNormal(corF);
+            btn7.setColorPressed(cor);
 
         } else {
             btn1.setColorHover(cor);
@@ -1324,6 +1371,10 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
             btn6.setColorHover(cor);
             btn6.setColorNormal(corF);
             btn6.setColorPressed(cor);
+            
+            btn7.setColorHover(cor);
+            btn7.setColorNormal(corF);
+            btn7.setColorPressed(cor);
         } else {
             btn3.setColorHover(cor);
             btn3.setColorNormal(cor);
@@ -1473,6 +1524,10 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
             btn6.setColorHover(cor);
             btn6.setColorNormal(cor);
             btn6.setColorPressed(cor);
+            
+            btn7.setColorHover(cor);
+            btn7.setColorNormal(corF);
+            btn7.setColorPressed(cor);
         } else {
             btn6.setColorHover(cor);
             btn6.setColorNormal(cor);
@@ -1609,9 +1664,55 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
         //fin de la busqueda de puertos-----------------------------------------
     }//GEN-LAST:event_jMenu4MouseEntered
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnClausulasPrivacidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClausulasPrivacidadActionPerformed
+    ClausulasPrivacidad obj=new ClausulasPrivacidad(this, true);
+    obj.setLocationRelativeTo(null);
+    obj.setVisible(true);
+    
+    }//GEN-LAST:event_btnClausulasPrivacidadActionPerformed
+
+    private void btn7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn7ActionPerformed
+        btnMenu.setEnabled(true);
+        if (!btn1.isSelected()) {
+            btn1.setColorHover(cor);
+            btn1.setColorNormal(corF);
+            btn1.setColorPressed(cor);
+
+            btn2.setColorHover(cor);
+            btn2.setColorNormal(corF);
+            btn2.setColorPressed(cor);
+
+            btn3.setColorHover(cor);
+            btn3.setColorNormal(corF);
+            btn3.setColorPressed(cor);
+
+            btn4.setColorHover(cor);
+            btn4.setColorNormal(corF);
+            btn4.setColorPressed(cor);
+
+            btn6.setColorHover(cor);
+            btn6.setColorNormal(corF);
+            btn6.setColorPressed(cor);
+            
+            btn7.setColorHover(cor);
+            btn7.setColorNormal(cor);
+            btn7.setColorPressed(cor);
+
+        } else {
+            btn7.setColorHover(cor);
+            btn7.setColorNormal(cor);
+            btn7.setColorPressed(cor);
+        }
+        if (!jPContenido.getComponent(0).getName().equals("Operarios")) {
+            new CambiaPanel(jPContenido, new Operarios());
+            Vistas.proyecto pro = new proyecto();
+
+            if (pro != null) {
+                pro.disponibilidad = false;
+                pro = null;
+            }
+        }    
+    }//GEN-LAST:event_btn7ActionPerformed
 //Metodos de la clase menu----------------------------------------------------->
 //...    
 //Configuracion de los puertos seriales-----------------------------------------
@@ -1968,6 +2069,8 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
     public rsbuttom.RSButtonMetro btn4;
     public rsbuttom.RSButtonMetro btn5;
     public rsbuttom.RSButtonMetro btn6;
+    public rsbuttom.RSButtonMetro btn7;
+    public javax.swing.JButton btnClausulasPrivacidad;
     public javax.swing.JButton btnMenu;
     public javax.swing.ButtonGroup estadoLectura;
     public javax.swing.JButton jBMinimizar;
@@ -2021,6 +2124,7 @@ public class Menu extends javax.swing.JFrame implements ActionListener {
     public javax.swing.JPanel jPanel6;
     public javax.swing.JPanel jPanel7;
     public javax.swing.JPanel jPanel8;
+    public javax.swing.JPanel jPanel9;
     public javax.swing.JPopupMenu jPopupMenu1;
     public static javax.swing.JRadioButtonMenuItem jRLActivado;
     public static javax.swing.JRadioButtonMenuItem jRLDesactivado;

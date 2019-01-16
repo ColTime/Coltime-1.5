@@ -699,7 +699,7 @@ public class ConsutaProyecto extends javax.swing.JFrame {
 
                         obj.jRPCBCOM.setSelected(false);
                         obj.jRPIntegracion.setSelected(false);
-                        obj.disponibilidad = false;
+//                        obj.disponibilidad = false;
                         
                         for (int i = 0; i < TDetalle.getRowCount(); i++) {
                             //Buscamos que detalles tiene este proyecto para enviar a la vista de proyecto

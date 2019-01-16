@@ -1,9 +1,11 @@
 package Vistas;
 
 import Controlador.DetalleProyecto;
+import Controlador.generarXlsx;
 import com.barcodelib.barcode.QRCode;
 import java.awt.Color;
 import java.io.File;
+import javax.sql.rowset.CachedRowSet;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -56,6 +58,9 @@ public class proyecto1 extends javax.swing.JPanel {
         jLMaterial = new javax.swing.JLabel();
         jPEstadistica = new javax.swing.JPanel();
         grafica = new javax.swing.JLabel();
+        btnEN = new javax.swing.JButton();
+        btnTE = new javax.swing.JButton();
+        btnFE = new javax.swing.JButton();
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Vbar.png"))); // NOI18N
         jMenuItem1.setText("Vertical");
@@ -345,8 +350,47 @@ public class proyecto1 extends javax.swing.JPanel {
         );
         jPEstadisticaLayout.setVerticalGroup(
             jPEstadisticaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(grafica, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+            .addComponent(grafica, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
         );
+
+        btnEN.setForeground(new java.awt.Color(0, 51, 255));
+        btnEN.setText("Genera Reporte Proyectos Terminados EN");
+        btnEN.setBorderPainted(false);
+        btnEN.setContentAreaFilled(false);
+        btnEN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEN.setFocusPainted(false);
+        btnEN.setFocusable(false);
+        btnEN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnENActionPerformed(evt);
+            }
+        });
+
+        btnTE.setForeground(new java.awt.Color(0, 51, 255));
+        btnTE.setText("Genera Reporte Proyectos Terminados TE");
+        btnTE.setBorderPainted(false);
+        btnTE.setContentAreaFilled(false);
+        btnTE.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnTE.setFocusPainted(false);
+        btnTE.setFocusable(false);
+        btnTE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTEActionPerformed(evt);
+            }
+        });
+
+        btnFE.setForeground(new java.awt.Color(0, 51, 255));
+        btnFE.setText("Genera Reporte Proyectos Terminados FE");
+        btnFE.setBorderPainted(false);
+        btnFE.setContentAreaFilled(false);
+        btnFE.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFE.setFocusPainted(false);
+        btnFE.setFocusable(false);
+        btnFE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFEActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -356,7 +400,14 @@ public class proyecto1 extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPEstadistica, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPInformacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPInformacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnFE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnTE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEN)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -366,7 +417,11 @@ public class proyecto1 extends javax.swing.JPanel {
                 .addComponent(jPInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPEstadistica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEN)
+                    .addComponent(btnTE)
+                    .addComponent(btnFE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -537,8 +592,44 @@ public class proyecto1 extends javax.swing.JPanel {
         }
         //Esta pendiente organizar esta parte del codigo----------------------------------------------------------------->
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnENActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnENActionPerformed
+        generarReportesTiemposArea(3);
+    }//GEN-LAST:event_btnENActionPerformed
+
+    private void btnTEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTEActionPerformed
+        generarReportesTiemposArea(2);
+    }//GEN-LAST:event_btnTEActionPerformed
+
+    private void btnFEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFEActionPerformed
+        generarReportesTiemposArea(1);
+    }//GEN-LAST:event_btnFEActionPerformed
 //Metodos-------------------------------------------------------------------->
 
+    private void generarReportesTiemposArea(int area){
+        //Reporte general Excel.
+        DetalleProyecto obj = new DetalleProyecto();
+        CachedRowSet crs = obj.generarReporteAreaTiempos(area);//Generar nuevo...
+        //Ruta de guardado del archivo
+        JFileChooser Chocer = new JFileChooser();
+        Chocer.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        Chocer.setLocation(500, 500);
+        Chocer.showOpenDialog(this);
+        File guardar = Chocer.getSelectedFile();//Selecciona la rota escogida en el jFileChooser
+        //Instancia de la clase encargada de generar los Excel del sistema de información...
+        generarXlsx excel = new generarXlsx();
+        if (guardar != null) {
+            //General el reporte de los tiempo de produccion del área...
+            if (excel.generarReporteTiemposAreaProduccion(crs, String.valueOf(guardar),area)) {//Información y ruta de guardado.
+                //Documento creado correctamente
+                new rojerusan.RSNotifyAnimated("Listo!", "El reporte General de producción fue creado exitosamente.", 7, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.BottomUp, RSNotifyAnimated.TypeNotify.SUCCESS).setVisible(true);
+            } else {
+                //Error al crear el documento
+                new rojerusan.RSNotifyAnimated("¡Error!", "No puedo crear el reporte General.", 7, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.BottomUp, RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            }
+        }
+    }    
+    
     private ImageIcon llamarDiagramas(int tipoDiagrama, int busqueda) {
         Controlador.Diagramas obj = new Controlador.Diagramas();
         return obj.graficaCantidad(tipoDiagrama, 0, "", "");
@@ -655,10 +746,13 @@ public class proyecto1 extends javax.swing.JPanel {
     public static javax.swing.JButton btnBuscarPNC;
     public static elaprendiz.gui.button.ButtonColoredAction btnConsultarDetalle;
     public static javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEN;
+    private javax.swing.JButton btnFE;
     public static elaprendiz.gui.button.ButtonColoredAction btnGenerarQR;
     public static javax.swing.JButton btnGuardar;
     public static javax.swing.JButton btnModificarPNC;
     public static javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnTE;
     public static elaprendiz.gui.comboBox.ComboBoxRound cbProcedoPNC;
     private javax.swing.JLabel grafica;
     public static javax.swing.JLabel jLDetalle;

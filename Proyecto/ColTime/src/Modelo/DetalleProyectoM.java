@@ -400,7 +400,7 @@ public class DetalleProyectoM {
         }
     }
 
-    public CachedRowSet generar_ReportesM() {//Falta generar los reportes
+    public CachedRowSet generar_ReportesM() {//
         try {
             conexion = new Conexion(1);
             conexion.establecerConexion();
@@ -418,6 +418,29 @@ public class DetalleProyectoM {
             con.close();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "¡Error!" + e);
+        }
+        return crs;
+    }
+    
+    public CachedRowSet generarReporteAreaTiemposM(int area){
+        try {
+            conexion =new Conexion(1);
+            conexion.establecerConexion();
+            con=conexion.getConexion();
+            //Quey------------------------------------------------------------->
+            String Qry= "CALL PA_ReporteTiemposAreaProduccion(?)";
+            ps=con.prepareStatement(Qry);
+            ps.setInt(1, area);
+            rs=ps.executeQuery();
+            crs=new CachedRowSetImpl();
+            crs.populate(rs);
+            //Cirre de conexiones
+            ps.close();
+            con.close();
+            conexion.cerrar(rs);
+            conexion.destruir();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,e);
         }
         return crs;
     }

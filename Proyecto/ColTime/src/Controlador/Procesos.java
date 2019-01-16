@@ -23,9 +23,9 @@ public class Procesos {
         return obj.guardarModificarProcesosM(op,nombre,area,id);
     }
 
-    public CachedRowSet consultarProcesos() {
+    public CachedRowSet consultarProcesos(int area) {
         ProcesosM obj = new ProcesosM();
-        return obj.consultarProcesosM();
+        return obj.consultarProcesosM(area);
     }
 
     public boolean cambiarEstadoProcesos(int estado,int id) {

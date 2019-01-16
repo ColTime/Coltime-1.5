@@ -7,11 +7,11 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 //import gnu.io.SerialPortEvent;
 //import gnu.io.SerialPortEventListener;
-import java.text.DateFormat;
+//import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Scanner;
-import static javax.print.attribute.Size2DSyntax.MM;
+//import static javax.print.attribute.Size2DSyntax.MM;
 import javax.swing.JOptionPane;
 import rojerusan.RSNotifyAnimated;
 
@@ -32,7 +32,7 @@ public class ProyectoQR implements Runnable {
         this.pro = pro;
         QRProyecto.start();
     }
-
+    //La direccion IP que va a enviar informacion al modulo del administrador es siempre: 192.168.4.1
     @Override
     public void run() {
         int abierto = 1;
@@ -44,7 +44,7 @@ public class ProyectoQR implements Runnable {
             if (puertoProyecto == 1) {
                 puertoProyecto = 0;
                 llenarCamporProyecto(valor);
-                abierto = 0;
+                abierto = 1;
             } else {
                 //No se pudo establecer la conexión con el puerto COM, desea cambiarlo o volver a intentar? 
                 if (JOptionPane.showOptionDialog(null, "No se pudo establecer la conexión con el puerto COM, ¿desea volver a intentarlo?",
@@ -93,12 +93,10 @@ public class ProyectoQR implements Runnable {
                         } else {
                             valor = mySC.next();
 //                            String sub = valor.substring(0, 1);
-                            System.out.println(valor);
-
+//                            System.out.println(valor);
 //                            String cadenaCompleata = "";
 //                            cadenaCompleata = cadenaCompleata + valor + "\n";
 //                            System.out.println(cadenaCompleata);
-
 //                            System.out.println(valor.split(";").length + " " + valor);
                             if (Character.isDigit(valor.charAt(1))) {
                                 //Cerrar puerto
@@ -106,7 +104,6 @@ public class ProyectoQR implements Runnable {
                                 puerto = null;
                                 break;//Salida del loop
                             }
-
                         }
                     }
                     //----------------------------------------------------------
@@ -252,6 +249,9 @@ public class ProyectoQR implements Runnable {
                         && !obj.cbTipo.getSelectedItem().toString().equals("Seleccione...")) {
                     obj.btnGuardar.setEnabled(true);
                 }
+                //Me va a guardar directamente la informacion del proyecto
+                obj.accionBtnGuardarProyecto();
+                //...
             } else {
                 //Mensaje...
                 //Al QR del proyecto le falta información para poder realizar el registro

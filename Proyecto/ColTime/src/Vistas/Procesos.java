@@ -617,7 +617,7 @@ public class Procesos extends javax.swing.JPanel {
             TE = new DefaultTableModel(null, name);
             EN = new DefaultTableModel(null, name);
             Controlador.Procesos obj = new Controlador.Procesos();
-            crs = obj.consultarProcesos();
+            crs = obj.consultarProcesos(0);
             while (crs.next()) {
                 v[0] = crs.getString(1);//Identificador
                 v[1] = crs.getString(2);//Nombre

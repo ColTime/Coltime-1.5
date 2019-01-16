@@ -52,12 +52,13 @@ public class ProcesosM {
         return res;
     }
 
-    public CachedRowSet consultarProcesosM() {
+    public CachedRowSet consultarProcesosM(int area) {
         try {
             conexion = new Conexion(1);
             conexion.establecerConexion();
             con = conexion.getConexion();
-            pps = con.prepareStatement("CALL PA_ConsultarProcesos()");
+            pps = con.prepareStatement("CALL PA_ConsultarProcesos(?)");
+            pps.setInt(1, area);
             crs = new CachedRowSetImpl();
             rs = pps.executeQuery();
             crs.populate(rs);
